@@ -1,8 +1,35 @@
-#ifndef __BOOTINFO_H__
-#define __BOOTINFO_H__
+#ifndef BOOT_INFO_H
+#define BOOT_INFO_H
 
-#include <efi.h>
 #include "types.h"
+
+typedef enum {
+	ReservedMemoryType,
+	LoaderCode,
+	LoaderData,
+	BootServicesCode,
+	BootServicesData,
+	RuntimeServicesCode,
+	RuntimeServicesData,
+	ConventionalMemory,
+	UnusableMemory,
+	ACPIReclaimMemory,
+	ACPIMemoryNVS,
+	MemoryMappedIO,
+	MemoryMappedIOPortSpace,
+	PalCode,
+	PersistentMemory,
+	UnacceptedMemoryType,
+	MaxMemoryType
+} MemoryType;
+
+typedef struct {
+	uint32_t		Type;
+	uint64_t		PhysicalStart;
+	uint64_t		VirtualStart;
+	uint64_t		NumberOfPages;
+	uint64_t		Attribute;
+} MemoryDescriptor;
 
 typedef struct {
     uint32_t Width;
@@ -12,9 +39,9 @@ typedef struct {
 } KernelGOPInfo;
 
 typedef struct {
-	EFI_MEMORY_DESCRIPTOR *mem_map;
-	UINTN mem_map_size;
-	UINTN desc_size;
+	MemoryDescriptor	*mem_map;
+	uint64_t			mem_map_size;
+	uint64_t			desc_size;
 } KernelMemMapInfo;
 
 typedef struct {
@@ -22,4 +49,4 @@ typedef struct {
 	KernelMemMapInfo *kmmi;
 } BootInfo;
 
-#endif // __BOOTINFO_H__
+#endif // BOOT_INFO_H

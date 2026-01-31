@@ -62,7 +62,7 @@ $(KERNEL_TARGET): $(KERNEL_OBJ) $(ASM_OBJ)
 
 kernel/obj/%.o: kernel/src/%.c
 	$(CC) -target x86_64-unknown-elf \
-		-I kernel/include -I ../gnu-efi/inc \
+		-I kernel/include \
 		-fno-pie \
 		-c $< -o $@
 
