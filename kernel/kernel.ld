@@ -29,24 +29,24 @@ SECTIONS
         KEEP(*(.data*))
     } :data
 
-    .bss ALIGN(0x1000) (NOLOAD):
+    .bss ALIGN(0x1000) :
     {
         KEEP(*(.bss*))
         KEEP(*(COMMON))
-    }
+    } :data
 
-	.stack ALIGN(0x1000) (NOLOAD):
+	.stack ALIGN(0x1000) :
 	{
 		__stack_start = .;
 		KEEP(*(.stack*))
 		. += 16K;
 		__stack_end = .;
-	}
+	} :data
 
-	.heap ALIGN(0x1000) (NOLOAD):
+	.heap ALIGN(0x1000) :
 	{
 		__kernel_heap_start = .;
 		KEEP(*(.heap*))
 		. += 4M;
-	}
+	} :data
 }
