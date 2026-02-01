@@ -37,10 +37,12 @@ $(ISO_TARGET): $(BOOT_TARGET) $(KERNEL_TARGET)
 	mcopy -i esp/efi.img $(BOOT_TARGET) ::/EFI/BOOT
 	mcopy -i esp/efi.img $(KERNEL_TARGET) ::/EFI/BOOT
 	xorriso -as mkisofs \
+		-V VEYRA_ISO \
 		-no-emul-boot \
 		-eltorito-alt-boot \
 		-isohybrid-gpt-basdat \
-		-e efi.img \
+		-append_partition 2 0xef esp/efi.img \
+		-partition_cyl_align all \
 		-o $(ISO_TARGET) esp/
 
 $(BOOT_TARGET): $(BOOT_OBJ)
