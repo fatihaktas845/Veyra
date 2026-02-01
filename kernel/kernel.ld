@@ -6,8 +6,9 @@ KERNEL_VIRT_BASE = 0xFFFFFFFF80000000;
 
 PHDRS
 {
-	text PT_LOAD FLAGS(5);
-	data PT_LOAD FLAGS(6);
+	text	PT_LOAD FLAGS(5);
+	data	PT_LOAD FLAGS(6);
+	rodata	PT_LOAD FLAGS(4);
 }
 
 SECTIONS
@@ -22,7 +23,7 @@ SECTIONS
     .rodata ALIGN(0x1000) :
     {
         KEEP(*(.rodata*))
-    } :data
+    } :rodata
 
     .data ALIGN(0x1000) :
     {
