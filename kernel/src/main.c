@@ -9,7 +9,7 @@ static inline void outb(uint16_t port, uint8_t val)
 }
 
 char* hex64_to_str(uint64_t hex) {
-    static char buf[17]; // 16 hex digit + '\0'
+    static char buf[17];
 
     for (int i = 15; i >= 0; i--) {
         uint8_t nibble = hex & 0xF;
