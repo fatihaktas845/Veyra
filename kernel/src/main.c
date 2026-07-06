@@ -26,7 +26,7 @@ void kmain() {
 
 	pmm_init(memmap_request.response, hhdm_offset);
 
-	volatile uint32_t* framebuffer_address = (uint32_t*)framebuffer->address;
+	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
@@ -36,5 +36,6 @@ void kmain() {
 		}
 	}
 	
-	__asm__ volatile("hlt" : : :);
+	while (1)
+		__asm__ volatile("hlt" : : :);
 }
