@@ -5,23 +5,26 @@ SECTIONS
 {
     . = 0xFFFFFFFF80000000;
 
-    .text : ALIGN(0x1000)
-    {
+    .text : ALIGN(0x1000) {
         *(.text .text.*)
     }
 
-    .rodata : ALIGN(0x1000)
-    {
+    .rodata : ALIGN(0x1000) {
         *(.rodata .rodata.*)
     }
 
-    .data : ALIGN(0x1000)
-    {
+	.init_array : ALIGN(0x1000) {
+		__init_array_start = .;
+		KEEP(*(.init_array .init_array.*));
+		KEEP(*(.ctors));
+		__init_array_end = .;
+	}
+
+    .data : ALIGN(0x1000) {
         *(.data .data.*)
     }
 
-    .bss : ALIGN(0x1000)
-    {
+    .bss : ALIGN(0x1000) {
         *(COMMON)
         *(.bss .bss.*)
     }
@@ -32,5 +35,11 @@ SECTIONS
 		KEEP(*(.stack.*))
 		. += 32K;
 		__stack_top = .;
+	}
+
+	/DISCARD/ : {
+		*(.eh_frame)
+		*(.note .note.*)
+		*(.comment)
 	}
 }

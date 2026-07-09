@@ -1,13 +1,13 @@
-CC := clang -target x86_64-unknown-none -ffreestanding -fno-stack-protector -mno-red-zone -fno-builtin -msoft-float -O2 -mcmodel=kernel -I kernel/include/
+CC := clang++ -target x86_64-unknown-none -ffreestanding -fno-stack-protector -mno-red-zone -fno-builtin -fno-rtti -fno-exceptions -msoft-float -O2 -mcmodel=kernel -I kernel/include/
 LD := ld.lld -T kernel/kernel.ld -nostdlib
 
 OUTPUT_BINARY := part_esp/kernel.elf
 OUTPUT_IMAGE := Veyra-x86_64-UEFI.img
 
-C_SOURCES := $(wildcard kernel/src/*.c)
+CPP_SOURCES := $(wildcard kernel/src/*.cpp)
 ASM_SOURCES := $(wildcard kernel/src/*.asm)
 
-OBJS := $(patsubst kernel/src/%.c, kernel/obj/%.o, $(C_SOURCES))
+OBJS := $(patsubst kernel/src/%.cpp, kernel/obj/%.o, $(CPP_SOURCES))
 OBJS += $(patsubst kernel/src/%.asm, kernel/obj/%.o, $(ASM_SOURCES))
 
 .PHONY: all clean
@@ -35,7 +35,7 @@ $(OUTPUT_IMAGE): $(OUTPUT_BINARY)
 $(OUTPUT_BINARY): $(OBJS)
 	$(LD) $^ -o $@
 
-kernel/obj/%.o: kernel/src/%.c
+kernel/obj/%.o: kernel/src/%.cpp
 	@mkdir -p kernel/obj
 	$(CC) -c $< -o $@
 

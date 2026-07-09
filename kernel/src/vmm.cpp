@@ -1,4 +1,4 @@
-#include "vmm.h"
+#include "vmm.hpp"
 
 static uint64_t* vmm_kernel_pml4_base = 0;
 static uint64_t  vmm_hhdm_offset = 0;

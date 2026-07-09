@@ -1,4 +1,4 @@
-#include "pmm.h"
+#include "pmm.hpp"
 
 #include <limine.h>
 
@@ -13,7 +13,7 @@ static uint64_t bitmap_size = 0;
 static uint64_t highest = 0;
 static uint64_t page_count = 0;
 
-void pmm_init(const struct limine_memmap_response* response, const uint64_t hhdm_offset) {
+void pmm::init(const struct limine_memmap_response* response, const uint64_t hhdm_offset) {
 	for (uint64_t i = 0; i < response->entry_count; i++) {
 		const struct limine_memmap_entry* entry = response->entries[i];
 		if (entry->type == LIMINE_MEMMAP_USABLE && entry->base + entry->length > highest)
@@ -69,7 +69,7 @@ void pmm_init(const struct limine_memmap_response* response, const uint64_t hhdm
 		bitmap_base[i / 64] |= (1ULL << (i % 64));
 }
 
-void* pmm_alloc_page() {
+void* pmm::alloc_page() {
 	for (uint64_t i = 0; i < bitmap_entry_count; i++) {
 		if (bitmap_base[i] == 0xFFFFFFFFFFFFFFFFULL)
 			continue;
@@ -83,7 +83,7 @@ void* pmm_alloc_page() {
 	return 0;
 }
 
-void pmm_free_page(void* physical_address) {
+void pmm::free_page(void* physical_address) {
 	const uint64_t aligned_physical_address = ALIGN_DOWN((uint64_t)physical_address);
 	const uint64_t page_number = aligned_physical_address / PAGE_SIZE;
 

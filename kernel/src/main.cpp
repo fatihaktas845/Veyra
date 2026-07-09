@@ -1,4 +1,5 @@
-#include "pmm.h"
+#include "pmm.hpp"
+#include "cxxabi.hpp"
 
 #include <limine.h>
 
@@ -20,11 +21,13 @@ static volatile struct limine_memmap_request memmap_request = {
 	.revision = 4
 };
 
-void kmain() {
-	const uint64_t hhdm_offset = hhdm_request.response->offset;
-	struct limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
+extern "C" void kmain() {
+	call_global_constructors();
 
-	pmm_init(memmap_request.response, hhdm_offset);
+	const uint64_t hhdm_offset = hhdm_request.response->offset;
+	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
+
+	pmm::init(memmap_request.response, hhdm_offset);
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 

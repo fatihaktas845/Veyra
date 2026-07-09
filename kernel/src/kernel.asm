@@ -3,8 +3,8 @@
 global _start
 
 extern __stack_top
-extern idtr
-extern init_idt
+extern _ZN3idt4idtrE
+extern _ZN3idt8init_idtEv
 extern kmain
 
 section .rodata
@@ -54,8 +54,8 @@ section .text
 		mov ss, ax
 		mov es, ax
 
-		call init_idt
-		lidt [rel idtr]
+		call _ZN3idt8init_idtEv
+		lidt [rel _ZN3idt4idtrE]
 		
 		jmp kmain
 
