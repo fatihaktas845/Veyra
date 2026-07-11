@@ -1,13 +1,7 @@
-#include "pmm.hpp"
+#include "PhysicalMemoryManager.hpp"
 #include "cxxabi.hpp"
 
 #include <limine.h>
-
-__attribute__((used, aligned(8)))
-static volatile struct limine_hhdm_request hhdm_request = {
-	.id = LIMINE_HHDM_REQUEST_ID,
-	.revision = 4
-};
 
 __attribute__((used, aligned(8)))
 static volatile struct limine_framebuffer_request framebuffer_request = {
@@ -24,10 +18,9 @@ static volatile struct limine_memmap_request memmap_request = {
 extern "C" void kmain() {
 	call_global_constructors();
 
-	const uint64_t hhdm_offset = hhdm_request.response->offset;
 	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
-	pmm::init(memmap_request.response, hhdm_offset);
+	PhysicalMemoryManager::init(memmap_request.response);
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 

@@ -1,0 +1,12 @@
+-target x86_64-unknown-none
+-ffreestanding
+-fno-stack-protector
+-mno-red-zone
+-fno-builtin
+-fno-rtti
+-fno-exceptions
+-msoft-float
+-O2
+-mcmodel=kernel
+-I kernel/include
+-fno-pie

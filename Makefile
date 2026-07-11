@@ -1,5 +1,5 @@
-CC := clang++ -target x86_64-unknown-none -ffreestanding -fno-stack-protector -mno-red-zone -fno-builtin -fno-rtti -fno-exceptions -msoft-float -O2 -mcmodel=kernel -I kernel/include/
-LD := ld.lld -T kernel/kernel.ld -nostdlib
+CC := clang++ @flags.txt
+LD := ld.lld -T kernel/kernel.ld -nostdlib -no-pie
 
 OUTPUT_BINARY := part_esp/kernel.elf
 OUTPUT_IMAGE := Veyra-x86_64-UEFI.img

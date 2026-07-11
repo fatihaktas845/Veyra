@@ -1,4 +1,5 @@
-#include "pmm.hpp"
+#include "PhysicalMemoryManager.hpp"
+#include "hhdm.hpp"
 
 #include <limine.h>
 
@@ -13,7 +14,9 @@ static uint64_t bitmap_size = 0;
 static uint64_t highest = 0;
 static uint64_t page_count = 0;
 
-void pmm::init(const struct limine_memmap_response* response, const uint64_t hhdm_offset) {
+void PhysicalMemoryManager::init(const limine_memmap_response* response) {
+	hhdm::init();
+
 	for (uint64_t i = 0; i < response->entry_count; i++) {
 		const struct limine_memmap_entry* entry = response->entries[i];
 		if (entry->type == LIMINE_MEMMAP_USABLE && entry->base + entry->length > highest)
@@ -32,7 +35,7 @@ void pmm::init(const struct limine_memmap_response* response, const uint64_t hhd
 			
 			if (aligned_end > aligned_base && (aligned_end - aligned_base) >= bitmap_size) {
 				bitmap_physical = aligned_base;
-				bitmap_base = (uint64_t*)(aligned_base + hhdm_offset);
+				bitmap_base = (uint64_t*)(aligned_base + hhdm::offset);
 				break;
 			}
 		}
@@ -43,7 +46,7 @@ void pmm::init(const struct limine_memmap_response* response, const uint64_t hhd
 	}
 
 	for (uint64_t i = 0; i < response->entry_count; i++) {
-		const struct limine_memmap_entry* entry = response->entries[i];
+		const limine_memmap_entry* entry = response->entries[i];
 
 		if (entry->type == LIMINE_MEMMAP_USABLE) {
 			uint64_t aligned_base = ALIGN_UP(entry->base);
@@ -69,7 +72,7 @@ void pmm::init(const struct limine_memmap_response* response, const uint64_t hhd
 		bitmap_base[i / 64] |= (1ULL << (i % 64));
 }
 
-void* pmm::alloc_page() {
+void* PhysicalMemoryManager::allocPage() {
 	for (uint64_t i = 0; i < bitmap_entry_count; i++) {
 		if (bitmap_base[i] == 0xFFFFFFFFFFFFFFFFULL)
 			continue;
@@ -83,7 +86,7 @@ void* pmm::alloc_page() {
 	return 0;
 }
 
-void pmm::free_page(void* physical_address) {
+void PhysicalMemoryManager::freePage(void* physicalAddress) {
 	const uint64_t aligned_physical_address = ALIGN_DOWN((uint64_t)physical_address);
 	const uint64_t page_number = aligned_physical_address / PAGE_SIZE;
 
