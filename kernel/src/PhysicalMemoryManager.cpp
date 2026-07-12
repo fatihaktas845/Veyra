@@ -87,7 +87,7 @@ void* PhysicalMemoryManager::allocPage() {
 }
 
 void PhysicalMemoryManager::freePage(void* physicalAddress) {
-	const uint64_t aligned_physical_address = ALIGN_DOWN((uint64_t)physical_address);
+	const uint64_t aligned_physical_address = ALIGN_DOWN((uint64_t)physicalAddress);
 	const uint64_t page_number = aligned_physical_address / PAGE_SIZE;
 
 	bitmap_base[page_number / 64] &= ~(1ULL << (page_number % 64));
