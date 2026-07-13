@@ -9,18 +9,12 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 	.revision = 4
 };
 
-__attribute__((used, aligned(8)))
-static volatile struct limine_memmap_request memmap_request = {
-	.id = LIMINE_MEMMAP_REQUEST_ID,
-	.revision = 4
-};
-
 extern "C" void kmain() {
 	call_global_constructors();
 
 	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
-	PhysicalMemoryManager::init(memmap_request.response);
+	PhysicalMemoryManager::init();
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 

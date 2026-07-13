@@ -4,20 +4,28 @@
 
 #include <stdint.h>
 
-#define VMM_PAGE_FLAG_P   (1ULL << 0)
-#define VMM_PAGE_FLAG_RW  (1ULL << 1)
+#define PAGE_FLAG_P   (1ULL << 0)
+#define PAGE_FLAG_RW  (1ULL << 1)
+#define PAGE_FLAG_US  (1ULL << 2)
+#define PAGE_FLAG_PWT (1ULL << 3)
+#define PAGE_FLAG_PCD (1ULL << 4)
+#define PAGE_FLAG_XD  (1ULL << 63)
 
 class VirtualMemoryManager {
 	private:
-		static VirtualAddress kernelPML4;
-		VirtualAddress currentPML4;
+		static VirtualAddress kernelPml4;
+		VirtualAddress currentPml4 = VirtualAddress(0);
 	
 	public:
 		VirtualMemoryManager();
-		VirtualMemoryManager(const VirtualAddress& va);
+		explicit VirtualMemoryManager(const VirtualAddress pml4);
 
-		void mapAddress(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags);
-		void unmapAddress(const VirtualAddress va);
+		void setPml4(const VirtualAddress pml4);
 
-		// TODO: Not Finished!!!
+		void mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags);
+		void unmapPage(const VirtualAddress va);
+
+		VirtualAddress allocPage();
+		void freePage(const VirtualAddress va);
+		// Not Finished!!!
 };

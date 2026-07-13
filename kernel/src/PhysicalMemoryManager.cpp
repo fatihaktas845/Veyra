@@ -3,6 +3,13 @@
 
 #include <limine.h>
 
+__attribute__((used, aligned(8)))
+static volatile struct limine_memmap_request memmap_request = {
+	.id = LIMINE_MEMMAP_REQUEST_ID,
+	.revision = 4,
+	.response = nullptr
+};
+
 #define PAGE_SIZE 4096
 #define ALIGN_UP(addr)   (((addr) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
 #define ALIGN_DOWN(addr) ((addr) & ~(PAGE_SIZE - 1))
@@ -14,8 +21,10 @@ static uint64_t bitmap_size = 0;
 static uint64_t highest = 0;
 static uint64_t page_count = 0;
 
-void PhysicalMemoryManager::init(const limine_memmap_response* response) {
+void PhysicalMemoryManager::init() {
 	hhdm::init();
+
+	const limine_memmap_response* response = memmap_request.response;
 
 	for (uint64_t i = 0; i < response->entry_count; i++) {
 		const struct limine_memmap_entry* entry = response->entries[i];
