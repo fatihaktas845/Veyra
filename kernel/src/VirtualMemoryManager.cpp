@@ -1,5 +1,6 @@
 #include "VirtualMemoryManager.hpp"
 #include "PhysicalMemoryManager.hpp"
+#include "kstring.hpp"
 
 VirtualAddress VirtualMemoryManager::kernelPml4 = VirtualAddress(0);
 
@@ -61,11 +62,39 @@ void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddres
 	uint64_t* pd   = nullptr;
 	uint64_t* pt   = nullptr;
 
-	if (this->currentPml4.raw & PAGE_FLAG_P)
-		pdpt = reinterpret_cast<uint64_t*>(pml4[pml4Index] | flags);
-	else {
-		// TO BE CONTINUED!!!
+	const uint64_t tableFlags = PAGE_FLAG_P | PAGE_FLAG_RW | PAGE_FLAG_US;
+
+	if (pml4[pml4Index] & PAGE_FLAG_P) {
+		PhysicalAddress p(pml4[pml4Index] & 0x000FFFFFFFFFF000ULL);
+		pdpt = p.toVirtualAddress().asPtr<uint64_t>();
+	} else {
+		VirtualAddress v = this->allocPage();
+		pdpt = v.asPtr<uint64_t>();
+		kstd::memset(pdpt, 0, 4096);
+		pml4[pml4Index] = v.toPhysicalAddress().raw | tableFlags;
 	}
+
+	if (pdpt[pdptIndex] & PAGE_FLAG_P) {
+		PhysicalAddress p(pdpt[pdptIndex] & 0x000FFFFFFFFFF000ULL);
+		pd = p.toVirtualAddress().asPtr<uint64_t>();
+	} else {
+		VirtualAddress v = this->allocPage();
+		pd = v.asPtr<uint64_t>();
+		kstd::memset(pd, 0, 4096);
+		pdpt[pdptIndex] = v.toPhysicalAddress().raw | tableFlags;
+	}
+
+	if (pd[pdIndex] & PAGE_FLAG_P) {
+		PhysicalAddress p(pd[pdIndex] & 0x000FFFFFFFFFF000ULL);
+		pt = p.toVirtualAddress().asPtr<uint64_t>();
+	} else {
+		VirtualAddress v = this->allocPage();
+		pt = v.asPtr<uint64_t>();
+		kstd::memset(pt, 0, 4096);
+		pd[pdIndex] = v.toPhysicalAddress().raw | tableFlags;
+	}
+
+	pt[ptIndex] = aligned_pa | flags;
 }
 
 VirtualAddress VirtualMemoryManager::allocPage() {
