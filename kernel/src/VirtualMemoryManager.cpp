@@ -172,3 +172,11 @@ void VirtualMemoryManager::freePage(const VirtualAddress va) {
 
 	PhysicalMemoryManager::freePage(pa);
 }
+
+VirtualAddress VirtualMemoryManager::allocPages(const uint64_t count) {
+
+}
+
+void VirtualMemoryManager::freePages(const VirtualAddress va, const uint64_t count) {
+
+}

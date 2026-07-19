@@ -104,7 +104,7 @@ void PhysicalMemoryManager::freePage(void* physicalAddress) {
 
 void* PhysicalMemoryManager::allocPages(uint64_t count) {
     if (count == 0) return nullptr;
-    if (count == 1) return allocPage(); // Tek sayfa için mevcut optimize fonksiyonu kullan
+    if (count == 1) return allocPage();
 
     uint64_t consecutive_found = 0;
     uint64_t start_page = 0;
@@ -113,27 +113,24 @@ void* PhysicalMemoryManager::allocPages(uint64_t count) {
         uint64_t entry_idx = i / 64;
         uint64_t bit_idx = i % 64;
 
-        // Bit 0 ise sayfa boş demektir
         if ((bitmap_base[entry_idx] & (1ULL << bit_idx)) == 0) {
             if (consecutive_found == 0) {
-                start_page = i; // Bloğun başlangıç sayfasını işaretle
+                start_page = i;
             }
             consecutive_found++;
 
             if (consecutive_found == count) {
-                // Yeterli ardışık boş sayfa bulundu, hepsini rezerve (1) yap
                 for (uint64_t j = start_page; j < start_page + count; j++) {
                     bitmap_base[j / 64] |= (1ULL << (j % 64));
                 }
                 return (void*)(start_page * PAGE_SIZE);
             }
         } else {
-            // Zincir bozuldu, aramayı sıfırla
             consecutive_found = 0;
         }
     }
 
-    return nullptr; // Uygun boyutta ardışık boş alan bulunamadı
+    return nullptr;
 }
 
 void PhysicalMemoryManager::freePages(void* physicalAddress, uint64_t count) {
@@ -142,7 +139,6 @@ void PhysicalMemoryManager::freePages(void* physicalAddress, uint64_t count) {
     const uint64_t aligned_physical_address = ALIGN_DOWN((uint64_t)physicalAddress);
     uint64_t start_page = aligned_physical_address / PAGE_SIZE;
 
-    // Belirtilen adresten başlayarak count kadar sayfayı serbest bırak (0 yap)
     for (uint64_t i = start_page; i < start_page + count; i++) {
         bitmap_base[i / 64] &= ~(1ULL << (i % 64));
     }
