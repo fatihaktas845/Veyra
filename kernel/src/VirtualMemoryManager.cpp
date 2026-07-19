@@ -95,6 +95,69 @@ void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddres
 	}
 
 	pt[ptIndex] = aligned_pa | flags;
+
+	__asm__ volatile(
+		"invlpg (%0)"
+		:
+		:"r"(aligned_va)
+		: "memory"
+	);
+}
+
+void VirtualMemoryManager::unmapPage(const VirtualAddress va) {
+	const uint64_t aligned_va = va.raw & ~0xFFFULL;
+
+	const uint64_t pml4Index = (aligned_va >> 39) & 0x1FFULL;
+	const uint64_t pdptIndex = (aligned_va >> 30) & 0x1FFULL;
+	const uint64_t pdIndex   = (aligned_va >> 21) & 0x1FFULL;
+	const uint64_t ptIndex   = (aligned_va >> 12) & 0x1FFULL;
+
+	uint64_t* const pml4 = this->currentPml4.asPtr<uint64_t>();
+	uint64_t* pdpt = nullptr;
+	uint64_t* pd   = nullptr;
+	uint64_t* pt   = nullptr;
+
+	if (pml4[pml4Index] & PAGE_FLAG_P) {
+		PhysicalAddress pa(pml4[pml4Index] & 0x000FFFFFFFFFF000ULL);
+		pdpt = reinterpret_cast<uint64_t*>(pa.toVirtualAddress().raw);
+	} else
+		return;
+
+	if (pdpt[pdptIndex] & PAGE_FLAG_P) {
+		PhysicalAddress pa(pdpt[pdptIndex] & 0x000FFFFFFFFFF000ULL);
+		pd = reinterpret_cast<uint64_t*>(pa.toVirtualAddress().raw);
+	} else
+		return;
+
+	if (pd[pdIndex] & PAGE_FLAG_P) {
+		PhysicalAddress pa(pd[pdIndex] & 0x000FFFFFFFFFF000ULL);
+		pt = reinterpret_cast<uint64_t*>(pa.toVirtualAddress().raw);
+	} else
+		return;
+
+	pt[ptIndex] = 0;
+
+	__asm__ volatile(
+		"invlpg (%0)"
+		:
+		:"r"(aligned_va)
+		: "memory"
+	);
+
+	bool isEmpty = true;
+	for (uint64_t i = 0; i < 512; i++) {
+		if (pt[i]) {
+			isEmpty = false;
+			break;
+		}
+	}
+
+	if (isEmpty) {
+		VirtualAddress ptVa(reinterpret_cast<uint64_t>(pt));
+		this->freePage(ptVa);
+
+		pd[pdIndex] = 0;
+	}
 }
 
 VirtualAddress VirtualMemoryManager::allocPage() {

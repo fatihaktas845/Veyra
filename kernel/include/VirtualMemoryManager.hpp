@@ -27,5 +27,4 @@ class VirtualMemoryManager {
 
 		VirtualAddress allocPage();
 		void freePage(const VirtualAddress va);
-		// Not Finished!!!
 };
