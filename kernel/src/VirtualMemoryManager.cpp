@@ -174,9 +174,14 @@ void VirtualMemoryManager::freePage(const VirtualAddress va) {
 }
 
 VirtualAddress VirtualMemoryManager::allocPages(const uint64_t count) {
-	
+	void* addr = PhysicalMemoryManager::allocPages(count);
+	PhysicalAddress pa(reinterpret_cast<uint64_t>(addr));
+
+	return pa.toVirtualAddress();
 }
 
 void VirtualMemoryManager::freePages(const VirtualAddress va, const uint64_t count) {
+	const uint64_t paAddr = va.toPhysicalAddress().raw;
 
+	PhysicalMemoryManager::freePages(reinterpret_cast<void*>(paAddr), count);
 }
