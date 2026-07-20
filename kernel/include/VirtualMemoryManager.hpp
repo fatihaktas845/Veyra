@@ -25,6 +25,8 @@ class VirtualMemoryManager {
 		void mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags);
 		void unmapPage(const VirtualAddress va);
 
+		// TODO: Write a physToVirt function!
+
 		VirtualAddress allocPage(const VirtualAddress addr);
 		void freePage(const VirtualAddress va);
 };
