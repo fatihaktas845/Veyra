@@ -10,7 +10,7 @@ struct PhysicalAddress {
 	PhysicalAddress();
 	explicit PhysicalAddress(const uint64_t addr);
 
-	VirtualAddress toVirtualAddress() const;
+	VirtualAddress toVirtualHhdmAddress() const;
 };
 
 struct VirtualAddress {
@@ -19,7 +19,7 @@ struct VirtualAddress {
 	VirtualAddress();
 	explicit VirtualAddress(const uint64_t addr);
 
-	PhysicalAddress toPhysicalAddress() const;
+	PhysicalAddress toPhysicalHhdmAddress() const;
 
 	template<typename T = void>
 	T* asPtr() const {
