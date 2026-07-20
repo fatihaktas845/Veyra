@@ -27,7 +27,4 @@ class VirtualMemoryManager {
 
 		VirtualAddress allocPage();
 		void freePage(const VirtualAddress va);
-
-		VirtualAddress allocPages(const uint64_t count);
-		void freePages(const VirtualAddress va, const uint64_t count);
 };
