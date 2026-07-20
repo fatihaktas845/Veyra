@@ -166,6 +166,6 @@ VirtualAddress VirtualMemoryManager::allocPage(const VirtualAddress addr) {
     return VirtualAddress(0);
 }
 
-void VirtualMemoryManager::freePage(const VirtualAddress va) {
+void VirtualMemoryManager::freePage(const VirtualAddress addr) {
 	// Not Finished!
 }
