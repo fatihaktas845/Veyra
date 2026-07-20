@@ -27,6 +27,6 @@ class VirtualMemoryManager {
 
 		// TODO: Write a physToVirt function!
 
-		VirtualAddress allocPage(const VirtualAddress addr);
-		void freePage(const VirtualAddress va);
+		VirtualAddress allocPage(const VirtualAddress pageAddr);
+		void freePage(const VirtualAddress pageAddr);
 };

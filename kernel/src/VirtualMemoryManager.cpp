@@ -160,12 +160,12 @@ void VirtualMemoryManager::unmapPage(const VirtualAddress va) {
 	}
 }
 
-VirtualAddress VirtualMemoryManager::allocPage(const VirtualAddress addr) {
+VirtualAddress VirtualMemoryManager::allocPage(const VirtualAddress pageAddr) {
 	// Not Finished!
 
     return VirtualAddress(0);
 }
 
-void VirtualMemoryManager::freePage(const VirtualAddress addr) {
+void VirtualMemoryManager::freePage(const VirtualAddress pageAddr) {
 	// Not Finished!
 }
