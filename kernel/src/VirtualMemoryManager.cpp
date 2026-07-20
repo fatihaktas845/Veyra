@@ -161,11 +161,11 @@ void VirtualMemoryManager::unmapPage(const VirtualAddress va) {
 }
 
 VirtualAddress VirtualMemoryManager::allocPage(const VirtualAddress addr) {
-	VirtualAddress va = addr;
+	// Not Finished!
+
+    return VirtualAddress(0);
 }
 
 void VirtualMemoryManager::freePage(const VirtualAddress va) {
-	void* pa = reinterpret_cast<void*>(va.toPhysicalHhdmAddress().raw);
-
-	PhysicalMemoryManager::freePage(pa);
+	// Not Finished!
 }
