@@ -2,7 +2,7 @@
 
 #include "address.hpp"
 
-#include <cstdint>
+#include <stdint.h>
 
 #define PAGE_FLAG_P   (1ULL << 0)
 #define PAGE_FLAG_RW  (1ULL << 1)
