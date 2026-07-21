@@ -18,7 +18,7 @@ namespace idt {
 		uint64_t offset;
 	} __attribute__((packed));
 
-	entry idt_entries[256] = {0};
+	entry idt_entries[256] = {};
 	descriptor idtr;
 
 	void set_idt_entry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute);

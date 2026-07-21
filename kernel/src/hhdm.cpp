@@ -5,7 +5,8 @@
 __attribute__((used, aligned(8)))
 static volatile struct limine_hhdm_request hhdmRequest = {
 	.id = LIMINE_HHDM_REQUEST_ID,
-	.revision = 4
+	.revision = 4,
+	.response = nullptr
 };
 
 namespace hhdm {

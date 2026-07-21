@@ -11,3 +11,5 @@
 -mcmodel=kernel
 -I kernel/include
 -fno-pie
+-Wall
+-Wextra

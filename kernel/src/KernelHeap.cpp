@@ -23,7 +23,7 @@ VirtualAddress KernelHeap::alloc() {
 }
 
 void KernelHeap::free(const VirtualAddress addr) {
-    (void*)addr.raw;
+    (void)addr.raw;
 
     // Not Finished!!!
 }
