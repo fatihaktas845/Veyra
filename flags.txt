@@ -5,6 +5,7 @@
 -fno-builtin
 -fno-rtti
 -fno-exceptions
+-fno-threadsafe-statics
 -msoft-float
 -O2
 -mcmodel=kernel

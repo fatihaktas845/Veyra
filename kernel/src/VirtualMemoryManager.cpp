@@ -202,6 +202,6 @@ void VirtualMemoryManager::allocPage(const VirtualAddress pageAddr, const uint64
 
 void VirtualMemoryManager::freePage(const VirtualAddress pageAddr) {
 	PhysicalAddress pa = this->toPhysicalAddress(pageAddr);
-
 	PhysicalMemoryManager::freePage(reinterpret_cast<void*>(pa.raw));
+	this->unmapPage(pageAddr);
 }

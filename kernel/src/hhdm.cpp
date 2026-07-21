@@ -12,6 +12,6 @@ namespace hhdm {
 	uint64_t offset;
 
 	void init() {
-		 offset = hhdmRequest.response->offset;
+		offset = hhdmRequest.response->offset;
 	}
 }
