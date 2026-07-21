@@ -160,12 +160,48 @@ void VirtualMemoryManager::unmapPage(const VirtualAddress va) {
 	}
 }
 
-VirtualAddress VirtualMemoryManager::allocPage(const VirtualAddress pageAddr) {
-	// Not Finished!
+PhysicalAddress VirtualMemoryManager::toPhysicalAddress(const VirtualAddress addr) {
+	const uint64_t va = addr.raw;
 
-    return VirtualAddress(0);
+	const uint64_t pml4Index = (va >> 39) & 0x1FFULL;
+	const uint64_t pdptIndex = (va >> 30) & 0x1FFULL;
+	const uint64_t pdIndex   = (va >> 21) & 0x1FFULL;
+	const uint64_t ptIndex   = (va >> 12) & 0x1FFULL;
+	const uint64_t offset    = va & 0xFFFULL;
+
+	const uint64_t* const pml4 = this->currentPml4.asPtr<uint64_t>();
+	const uint64_t* pdpt = nullptr;
+	const uint64_t* pd   = nullptr;
+	const uint64_t* pt   = nullptr;
+
+	if (pml4[pml4Index] & PAGE_FLAG_P) {
+		PhysicalAddress pa(pml4[pml4Index] & 0x000FFFFFFFFFF000ULL);
+		pdpt = pa.toVirtualHhdmAddress().asPtr<uint64_t>();
+	} else return PhysicalAddress(0);
+
+	if (pdpt[pdptIndex] & PAGE_FLAG_P) {
+		PhysicalAddress pa(pdpt[pdptIndex] & 0x000FFFFFFFFFF000ULL);
+		pd = pa.toVirtualHhdmAddress().asPtr<uint64_t>();
+	} else return PhysicalAddress(0);
+
+	if (pd[pdIndex] & PAGE_FLAG_P) {
+		PhysicalAddress pa(pd[pdIndex] & 0x000FFFFFFFFFF000ULL);
+		pt = pa.toVirtualHhdmAddress().asPtr<uint64_t>();
+	} else return PhysicalAddress(0);
+
+	if (pt[ptIndex] & PAGE_FLAG_P) {
+		PhysicalAddress pa((pt[ptIndex] & 0x000FFFFFFFFFF000ULL) + offset);
+		return pa;
+	} else return PhysicalAddress(0);
+}
+
+void VirtualMemoryManager::allocPage(const VirtualAddress pageAddr, const uint64_t flags) {
+	const uint64_t paRaw = reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage());
+	this->mapPage(PhysicalAddress(paRaw), pageAddr, flags);
 }
 
 void VirtualMemoryManager::freePage(const VirtualAddress pageAddr) {
-	// Not Finished!
+	PhysicalAddress pa = this->toPhysicalAddress(pageAddr);
+
+	PhysicalMemoryManager::freePage(reinterpret_cast<void*>(pa.raw));
 }
