@@ -3,8 +3,8 @@
 void KernelHeap::init() {
     expand(4);
 
-    linkedList = reinterpret_cast<Block_t*>(KERNEL_HEAP_START);
-    linkedList->size = KERNEL_HEAP_END - KERNEL_HEAP_START - sizeof(Block_t);
+    linkedList = reinterpret_cast<BlockHeader*>(KERNEL_HEAP_START);
+    linkedList->size = KERNEL_HEAP_END - KERNEL_HEAP_START - sizeof(BlockHeader);
     linkedList->isFree = true;
     linkedList->next = nullptr;
 }
@@ -17,6 +17,8 @@ void KernelHeap::expand(const uint64_t count) {
 }
 
 VirtualAddress KernelHeap::alloc(const uint64_t size) {
+    if (size == 0) return VirtualAddress(0);
+
     // Not Finished!!!
 
     return VirtualAddress(0);
