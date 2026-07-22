@@ -16,7 +16,7 @@ void KernelHeap::expand(const uint64_t count) {
     }
 }
 
-VirtualAddress KernelHeap::alloc() {
+VirtualAddress KernelHeap::alloc(const uint64_t size) {
     // Not Finished!!!
 
     return VirtualAddress(0);

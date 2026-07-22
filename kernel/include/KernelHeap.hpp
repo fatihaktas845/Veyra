@@ -8,17 +8,17 @@ namespace KernelHeap {
     uint64_t KERNEL_HEAP_PML4_INDEX = 300;
     VirtualMemoryManager kernelVMM;
 
-    struct Block_t {
+    struct BlockHeader {
         uint64_t size = 0;
         bool isFree = true;
-        Block_t* next = nullptr;
+        BlockHeader* next = nullptr;
     };
 
-    Block_t* linkedList = nullptr;
+    BlockHeader* linkedList = nullptr;
     
     void init();
     void expand(const uint64_t count);
 
-    VirtualAddress alloc();
+    VirtualAddress alloc(const uint64_t size);
     void free(const VirtualAddress addr);
 }
