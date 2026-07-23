@@ -1,9 +1,19 @@
 #include "KernelHeap.hpp"
 #include "PhysicalMemoryManager.hpp"
 
+namespace {
+    uint64_t KERNEL_HEAP_START = 0xFFFF'9600'0000'0000ULL;
+    uint64_t KERNEL_HEAP_END = KERNEL_HEAP_START;
+    uint64_t KERNEL_HEAP_PML4_INDEX = 300;
+
+    VirtualMemoryManager kernelVMM; 
+    
+    KernelHeap::BlockHeader* linkedList = nullptr;
+}
+
 void KernelHeap::init() {
     PhysicalMemoryManager::init();
-    
+
     expand(4);
 
     linkedList = reinterpret_cast<BlockHeader*>(KERNEL_HEAP_START);
