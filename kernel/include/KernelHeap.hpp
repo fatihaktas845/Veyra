@@ -17,7 +17,7 @@ namespace KernelHeap {
     BlockHeader* linkedList = nullptr;
     
     void init();
-    void expand(const uint64_t count);
+    bool expand(const uint64_t pageCount);
 
     VirtualAddress alloc(const uint64_t size);
     void free(const VirtualAddress addr);
