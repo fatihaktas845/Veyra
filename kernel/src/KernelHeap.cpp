@@ -1,6 +1,9 @@
 #include "KernelHeap.hpp"
+#include "PhysicalMemoryManager.hpp"
 
 void KernelHeap::init() {
+    PhysicalMemoryManager::init();
+    
     expand(4);
 
     linkedList = reinterpret_cast<BlockHeader*>(KERNEL_HEAP_START);

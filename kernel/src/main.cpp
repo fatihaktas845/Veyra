@@ -1,5 +1,5 @@
-#include "PhysicalMemoryManager.hpp"
 #include "cxxabi.hpp"
+#include "KernelHeap.hpp"
 
 #include <limine.h>
 
@@ -13,9 +13,9 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 extern "C" void kmain() {
 	call_global_constructors();
 
-	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
+	KernelHeap::init();
 
-	PhysicalMemoryManager::init();
+	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 
