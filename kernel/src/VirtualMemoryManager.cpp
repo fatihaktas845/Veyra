@@ -18,6 +18,8 @@ VirtualMemoryManager::VirtualMemoryManager() {
 		
 		this->kernelPml4 = pa.toVirtualHhdmAddress();
 	}
+
+	this->currentPml4 = this->kernelPml4;
 }
 
 VirtualMemoryManager::VirtualMemoryManager(const VirtualAddress pml4) {

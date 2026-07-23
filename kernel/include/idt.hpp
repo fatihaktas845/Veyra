@@ -24,7 +24,16 @@ namespace idt {
 	void set_idt_entry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute);
 	void init_idt();
 
+	struct interrupt_frame {
+    	uint64_t ip;
+    	uint64_t cs;
+    	uint64_t flags;
+    	uint64_t sp;
+    	uint64_t ss;
+	};
+
 	void divide_error();
 	void general_protection();
-	void page_fault();
+	__attribute__((interrupt))
+	void page_fault(interrupt_frame* frame, uint64_t errorCode);
 }

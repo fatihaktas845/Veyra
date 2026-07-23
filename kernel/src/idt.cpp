@@ -33,7 +33,11 @@ void idt::general_protection() {
 		__asm__ volatile("hlt");
 }
 
-void idt::page_fault() {
+__attribute__((interrupt))
+void idt::page_fault(interrupt_frame* frame, uint64_t errorCode) {
+	(void)frame;
+	(void)errorCode;
+	
 	__asm__ volatile("movq $15, %%rax" : : : "rax");
 
 	while (1)
