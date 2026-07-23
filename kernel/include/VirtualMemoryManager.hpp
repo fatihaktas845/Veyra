@@ -27,6 +27,6 @@ class VirtualMemoryManager {
 
 		PhysicalAddress toPhysicalAddress(const VirtualAddress addr);
 
-		void allocPage(const VirtualAddress pageAddr, const uint64_t flags);
+		bool allocPage(const VirtualAddress pageAddr, const uint64_t flags);
 		void freePage(const VirtualAddress pageAddr);
 };

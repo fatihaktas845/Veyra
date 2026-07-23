@@ -195,9 +195,14 @@ PhysicalAddress VirtualMemoryManager::toPhysicalAddress(const VirtualAddress add
 	} else return PhysicalAddress(0);
 }
 
-void VirtualMemoryManager::allocPage(const VirtualAddress pageAddr, const uint64_t flags) {
+bool VirtualMemoryManager::allocPage(const VirtualAddress pageAddr, const uint64_t flags) {
 	const uint64_t paRaw = reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage());
-	this->mapPage(PhysicalAddress(paRaw), pageAddr, flags);
+
+	if (paRaw) {
+		this->mapPage(PhysicalAddress(paRaw), pageAddr, flags);
+		return true;
+	} else 
+		return false;
 }
 
 void VirtualMemoryManager::freePage(const VirtualAddress pageAddr) {
