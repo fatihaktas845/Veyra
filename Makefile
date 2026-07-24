@@ -40,6 +40,7 @@ kernel/obj/%.o: kernel/src/%.cpp
 	$(CC) -c $< -o $@
 
 kernel/obj/%.o: kernel/src/%.asm
+	@mkdir -p kernel/obj
 	nasm -f elf64 $< -o $@
 
 clean:

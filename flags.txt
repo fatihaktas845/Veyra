@@ -13,3 +13,4 @@
 -fno-pie
 -Wall
 -Wextra
+-std=c++20
