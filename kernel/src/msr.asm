@@ -6,7 +6,7 @@ global writeMsr
 section .text
 
 ; uint64_t(RAX) readMsr(uint32_t msr(RDI))
-readMsr:
+asm_msr_read:
     mov ecx, edi
     rdmsr
     
@@ -16,7 +16,7 @@ readMsr:
     ret
 
 ; void writeMsr(uint32_t msr(RDI), uint64_t value(RSI))
-writeMsr:
+asm_msr_write:
     mov ecx, edi
 
     mov eax, esi
