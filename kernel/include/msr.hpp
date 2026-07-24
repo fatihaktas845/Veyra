@@ -18,12 +18,12 @@ namespace msr {
 
     inline void write(const uint32_t msr, const uint64_t value) {
         const uint32_t low = static_cast<uint32_t>(value);
-        const uint32_t hight = static_cast<uint32_t>(value >> 32);
+        const uint32_t high = static_cast<uint32_t>(value >> 32);
 
         __asm__ volatile(
             "wrmsr"
             :
-            : "a"(low), "d"(hight), "c"(msr)
+            : "a"(low), "d"(high), "c"(msr)
             : "memory"
         );
     }
