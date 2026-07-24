@@ -114,7 +114,11 @@ VirtualAddress KernelHeap::alloc(const uint64_t size) {
 }
 
 void KernelHeap::free(const VirtualAddress addr) {
-    (void)addr.raw;
+    if (addr.raw == 0)
+        return;
 
-    // Not Finished!!!
+    BlockHeader* block = reinterpret_cast<BlockHeader*>(addr.raw - sizeof(BlockHeader));
+    block->isFree = true;
+
+    // TODO: Add coalescing later!!!
 }
