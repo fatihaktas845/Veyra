@@ -1,7 +1,7 @@
 #include "idt.hpp"
 
 static idt::entry idt_entries[256] = {};
-extern "C" idt::descriptor idtr;
+idt::descriptor idtr;
 
 void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute) {
 	idt_entries[index].offset_1 = (uint16_t)(offset & 0xFFFF);

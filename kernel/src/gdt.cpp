@@ -1,7 +1,7 @@
 #include "gdt.hpp"
 
 uint64_t gdtArray[7] = {};
-extern "C" gdt::GDTR gdtr;
+gdt::GDTR gdtr;
 gdt::TSS tss;
 
 extern "C" uint64_t kernel_stack_top[];
@@ -10,7 +10,7 @@ extern "C" uint64_t double_fault_stack_top[];
 extern "C" void initGdt() {
     tss.rsp[0] = reinterpret_cast<uint64_t>(kernel_stack_top);
     tss.ist[0] = reinterpret_cast<uint64_t>(double_fault_stack_top);
-    
+
     uint64_t base = reinterpret_cast<uint64_t>(&tss);
     uint64_t limit = sizeof(gdt::TSS) - 1;
 
