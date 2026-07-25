@@ -25,6 +25,9 @@ section .rodata
 		db 0b10010011
 		db 0b10001111
 		db 0x0
+
+		dq 0x0 ; User Code Descriptor
+		dq 0x0 ; User Data Descriptor
 	gdt_end:
 
 	align 16
@@ -41,10 +44,10 @@ section .text
 
 		xor rbp, rbp
 
-		lgdt [rel gdtr]
+		lgdt [gdtr]
 
 		push 0x08
-		lea rax, [rel after_cs_reload]
+		lea rax, [after_cs_reload]
 		push rax
 		retfq
 
@@ -55,7 +58,7 @@ section .text
 		mov es, ax
 
 		call _ZN3idt8init_idtEv
-		lidt [rel _ZN3idt4idtrE]
+		lidt [_ZN3idt4idtrE]
 		
 		jmp kmain
 
