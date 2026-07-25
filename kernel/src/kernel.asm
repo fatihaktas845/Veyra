@@ -2,6 +2,7 @@
 DEFAULT ABS
 
 global _start
+global double_fault_stack_top
 
 extern kernel_stack_top
 extern gdtr
