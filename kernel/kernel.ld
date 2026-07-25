@@ -30,11 +30,10 @@ SECTIONS
     }
 
 	.stack (NOLOAD) : ALIGN(0x1000) {
-		__stack_bottom = .;
 		KEEP(*(.stack))
 		KEEP(*(.stack.*))
 		. += 32K;
-		__stack_top = .;
+		kernel_stack_top = .;
 	}
 
 	/DISCARD/ : {
