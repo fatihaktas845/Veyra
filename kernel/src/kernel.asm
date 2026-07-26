@@ -43,6 +43,10 @@ section .text
 
 		call initIdt
 		lidt [idtr]
+
+		mov al, 0xFF
+		out 0x21, al
+		out 0xA1, al
 		
 		jmp kmain
 
