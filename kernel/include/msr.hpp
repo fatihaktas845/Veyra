@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#define IA32_APIC_BASE_MSR 0x1B
 namespace msr {
     [[nodiscard]] inline uint64_t read(const uint32_t msr) {
         uint32_t low, high;
