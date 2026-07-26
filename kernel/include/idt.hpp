@@ -19,17 +19,4 @@ namespace idt {
 	} __attribute__((packed));
 
 	void setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute);
-
-	struct interrupt_frame {
-    	uint64_t ip;
-    	uint64_t cs;
-    	uint64_t flags;
-    	uint64_t sp;
-    	uint64_t ss;
-	};
-
-	void divide_error();
-	void general_protection();
-	__attribute__((interrupt))
-	void page_fault(interrupt_frame* frame, uint64_t errorCode);
 }

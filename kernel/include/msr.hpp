@@ -2,7 +2,15 @@
 
 #include <stdint.h>
 
-#define IA32_APIC_BASE_MSR 0x1B
+#define IA32_APIC_BASE_MSR  0x1B
+#define IA32_X2APIC_SIV_MSR 0x80F
+#define IA32_X2APIC_EOI_MSR 0x80B
+
+// LAPIC Timer MSRs
+#define IA32_X2APIC_DCR_MSR 0x83E
+#define IA32_X2APIC_LVT_MSR 0x832
+#define IA32_X2APIC_ICR_MSR 0x838
+
 namespace msr {
     [[nodiscard]] inline uint64_t read(const uint32_t msr) {
         uint32_t low, high;
