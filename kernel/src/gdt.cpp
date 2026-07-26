@@ -16,8 +16,8 @@ extern "C" void initGdt() {
 
     gdt::setEntry(1, 0x9B, 0xA); // Kernel-Code Segment
     gdt::setEntry(2, 0x93, 0xA); // Kernel-Data Segment
-    gdt::setEntry(4, 0xF3, 0xA); // User-Data Segment
-    gdt::setEntry(3, 0xFB, 0xA); // User-Code Segment
+    gdt::setEntry(3, 0xF3, 0xA); // User-Data Segment
+    gdt::setEntry(4, 0xFB, 0xA); // User-Code Segment
     gdt::setSystemEntry(5, base, limit, 0x89, 0xA); // Kernel-Task State Segment
 
     gdtr.size = sizeof(gdtArray) - 1;
