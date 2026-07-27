@@ -7,9 +7,9 @@
 #define IA32_X2APIC_EOI_MSR 0x80B
 
 // LAPIC Timer MSRs
-#define IA32_X2APIC_DCR_MSR 0x83E
-#define IA32_X2APIC_LVT_MSR 0x832
-#define IA32_X2APIC_ICR_MSR 0x838
+#define IA32_X2APIC_LVT_TIMER_MSR  0x832
+#define IA32_X2APIC_INIT_COUNT_MSR 0x838
+#define IA32_X2APIC_DIV_CONF_MSR   0x83E
 
 namespace msr {
     [[nodiscard]] inline uint64_t read(const uint32_t msr) {
