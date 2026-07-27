@@ -4,6 +4,8 @@ static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
 
 extern "C" {
+	void divideErrorAsm();
+
 	void divideError() {
 		__asm__ volatile("movq $1, %%rax": : : "rax");
 
@@ -44,7 +46,7 @@ void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_
 }
 
 extern "C" void initIdt() {
-	idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideError), 0, 0x8F);
+	idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideErrorAsm), 0, 0x8F);
 	idt::setIdtEntry(13, reinterpret_cast<uint64_t>(generalProtection), 0, 0x8F);
 	idt::setIdtEntry(14, reinterpret_cast<uint64_t>(pageFault), 0, 0x8F);
 	idt::setIdtEntry(8, reinterpret_cast<uint64_t>(doubleFault), 1, 0x8F);

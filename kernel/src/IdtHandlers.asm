@@ -1,5 +1,9 @@
 [BITS 64]
 
+extern divideError
+
+global divideErrorAsm
+
 section .text
     %macro pushall 0
         push rax
@@ -36,3 +40,10 @@ section .text
         pop rbx
         pop rax
     %endmacro
+
+    divideErrorAsm:
+        pushall
+        call divideError
+        popall
+
+        iretq
