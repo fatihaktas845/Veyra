@@ -42,5 +42,5 @@ extern "C" void initIdt() {
 	idt::setIdtEntry(14, (uint64_t)page_fault, 0, 0x8F);
 
 	idtr.size = sizeof(idt_entries) - 1;
-	idtr.offset = (uint64_t)idt_entries;
+	idtr.offset = reinterpret_cast<uint64_t>(idt_entries);
 }
