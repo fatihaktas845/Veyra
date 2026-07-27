@@ -4,21 +4,28 @@ static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
 
 extern "C" {
-	void divide_error() {
+	void divideError() {
 		__asm__ volatile("movq $1, %%rax": : : "rax");
 
 		while (1)
 			__asm__ volatile("hlt");
 	}
 
-	void general_protection() {
+	void generalProtection() {
 		__asm__ volatile("movq $14, %%rax" : : : "rax");
 
 		while (1)
 			__asm__ volatile("hlt");
 	}
 
-	void page_fault() {
+	void pageFault() {
+		__asm__ volatile("movq $15, %%rax" : : : "rax");
+
+		while (1)
+			__asm__ volatile("hlt");
+	}
+
+	void doubleFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
 		while (1)
@@ -37,9 +44,10 @@ void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_
 }
 
 extern "C" void initIdt() {
-	idt::setIdtEntry(0, (uint64_t)divide_error, 0, 0x8F);
-	idt::setIdtEntry(13, (uint64_t)general_protection, 0, 0x8F);
-	idt::setIdtEntry(14, (uint64_t)page_fault, 0, 0x8F);
+	idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideError), 0, 0x8F);
+	idt::setIdtEntry(13, reinterpret_cast<uint64_t>(generalProtection), 0, 0x8F);
+	idt::setIdtEntry(14, reinterpret_cast<uint64_t>(pageFault), 0, 0x8F);
+	idt::setIdtEntry(8, reinterpret_cast<uint64_t>(doubleFault), 1, 0x8F);
 
 	idtr.size = sizeof(idt_entries) - 1;
 	idtr.offset = reinterpret_cast<uint64_t>(idt_entries);
