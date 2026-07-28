@@ -7,7 +7,7 @@
 -fno-exceptions
 -fno-threadsafe-statics
 -msoft-float
--O2
+-O0
 -mcmodel=kernel
 -I kernel/include
 -fno-pie
