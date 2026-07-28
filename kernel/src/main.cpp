@@ -13,20 +13,10 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 };
 
 extern "C" void kmain() {
-	call_global_constructors();
-
-	KernelHeap::init();
-	apic::init();
-	idt::setInterrupts();
-
 	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
-
-	uint32_t* fbb = new uint32_t; // For testing KernelHeap
-	*fbb = 214;
-	delete fbb;
-
+	
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
 			int pixel_index = x + (y * framebuffer->pitch / 4);
@@ -35,9 +25,15 @@ extern "C" void kmain() {
 		}
 	}
 
-	__asm__ volatile(
-		"wbinvd": : : "memory"
-	);
+	call_global_constructors();
+
+	KernelHeap::init();
+	apic::init();
+	idt::setInterrupts();
+
+	uint32_t* fbb = new uint32_t; // For testing KernelHeap
+	*fbb = 214;
+	delete fbb;
 	
 	while (1)
 		__asm__ volatile("hlt" : : :);
