@@ -18,7 +18,6 @@ all: $(OUTPUT_IMAGE)
 		-net none \
 		-enable-kvm \
 		-cpu host \
-		-gdb tcp:localhost:4444 \
 		-drive if=pflash,format=raw,readonly=true,file=code.fd \
 		-drive if=pflash,format=raw,file=vars.fd \
 		-drive format=raw,file=$< \
