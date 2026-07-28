@@ -8,7 +8,7 @@
 __attribute__((used, aligned(8)))
 static volatile struct limine_framebuffer_request framebuffer_request = {
 	.id = LIMINE_FRAMEBUFFER_REQUEST_ID,
-	.revision = 4,
+	.revision = 0,
 	.response = nullptr
 };
 
