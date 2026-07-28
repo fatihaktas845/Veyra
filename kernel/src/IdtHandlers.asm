@@ -6,16 +6,9 @@ DEFAULT ABS
 extern divideError
 extern timerInterrupt
 
-global divideErrorAsm
 global timerInterruptAsm
 
 section .text
-    divideErrorAsm:
-        pushall
-        call divideError
-        popall
-        iretq
-    
     timerInterruptAsm:
         pushall
         call timerInterrupt

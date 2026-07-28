@@ -1,6 +1,3 @@
-[BITS 64]
-DEFAULT ABS
-
 %macro pushall 0
     push rax
     push rbx

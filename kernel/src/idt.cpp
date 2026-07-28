@@ -6,7 +6,6 @@ idt::descriptor idtr;
 uint64_t timerInterruptCounter = 0;
 
 extern "C" {
-	void divideErrorAsm();
 	void timerInterruptAsm();
 
 	void divideError() {
@@ -55,7 +54,7 @@ void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_
 }
 
 extern "C" void initIdt() {
-	idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideErrorAsm), 0, 0x8F);
+	idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideError), 0, 0x8F);
 	idt::setIdtEntry(13, reinterpret_cast<uint64_t>(generalProtection), 0, 0x8F);
 	idt::setIdtEntry(14, reinterpret_cast<uint64_t>(pageFault), 0, 0x8F);
 	idt::setIdtEntry(8, reinterpret_cast<uint64_t>(doubleFault), 1, 0x8F);
