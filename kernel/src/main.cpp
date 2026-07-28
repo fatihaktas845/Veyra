@@ -23,6 +23,10 @@ extern "C" void kmain() {
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 
+	uint32_t* fbb = new uint32_t; // For testing KernelHeap
+	*fbb = 214;
+	delete fbb;
+
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
 			int pixel_index = x + (y * framebuffer->pitch / 4);
