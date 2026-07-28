@@ -25,8 +25,8 @@ extern "C" {
 	void pageFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		while (1)
-			__asm__ volatile("hlt");
+		while (1);
+			// __asm__ volatile("hlt");
 	}
 
 	void doubleFault() {

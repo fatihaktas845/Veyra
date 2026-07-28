@@ -15,13 +15,16 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 extern "C" void kmain() {
 	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
+	if (framebuffer_request.response->framebuffer_count > 1)
+		while(1);
+
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 	
 	const uint64_t width = framebuffer->width;
 	const uint64_t height = framebuffer->height;
 
-	for (int y = 0; y < height; y++) {
-		for (int x = 0; x < width; x++) {
+	for (uint64_t y = 0; y < height; y++) {
+		for (uint64_t x = 0; x < width; x++) {
 			int pixel_index = x + (y * (framebuffer->pitch / 4));
 
 			framebuffer_address[pixel_index] = 0x00FFFFFF;
