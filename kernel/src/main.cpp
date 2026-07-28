@@ -34,6 +34,10 @@ extern "C" void kmain() {
 			framebuffer_address[pixel_index] = 0x00FF0000;
 		}
 	}
+
+	__asm__ volatile(
+		"wbinvd": : : "memory"
+	);
 	
 	while (1)
 		__asm__ volatile("hlt" : : :);
