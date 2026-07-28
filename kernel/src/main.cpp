@@ -23,10 +23,6 @@ extern "C" void kmain() {
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 
-	volatile uint32_t* fbbValue = new uint32_t;
-	fbbValue = framebuffer_address;
-	delete fbbValue;
-
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
 			int pixel_index = x + (y * framebuffer->pitch / 4);
