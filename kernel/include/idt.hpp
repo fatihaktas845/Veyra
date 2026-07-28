@@ -19,4 +19,16 @@ namespace idt {
 	} __attribute__((packed));
 
 	void setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute);
+
+	inline void clearInterrupts() {
+		__asm__ volatile(
+			"cli": : : "memory"
+		);
+	}
+
+	inline void setInterrupts() {
+		__asm__ volatile(
+			"sti": : : "memory"
+		);
+	}
 }

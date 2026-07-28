@@ -1,10 +1,13 @@
 #include "idt.hpp"
+#include "msr.hpp"
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
+uint64_t timerInterruptCounter = 0;
 
 extern "C" {
 	void divideErrorAsm();
+	void timerInterruptAsm();
 
 	void divideError() {
 		__asm__ volatile("movq $1, %%rax": : : "rax");
@@ -33,6 +36,12 @@ extern "C" {
 		while (1)
 			__asm__ volatile("hlt");
 	}
+
+	void timerInterrupt() {
+		timerInterruptCounter++;
+
+		msr::write(IA32_X2APIC_EOI_MSR, 0);
+	}
 }
 
 void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute) {
@@ -50,6 +59,8 @@ extern "C" void initIdt() {
 	idt::setIdtEntry(13, reinterpret_cast<uint64_t>(generalProtection), 0, 0x8F);
 	idt::setIdtEntry(14, reinterpret_cast<uint64_t>(pageFault), 0, 0x8F);
 	idt::setIdtEntry(8, reinterpret_cast<uint64_t>(doubleFault), 1, 0x8F);
+
+	idt::setIdtEntry(0x20, reinterpret_cast<uint64_t>(timerInterruptAsm), 0, 0x8E);
 
 	idtr.size = sizeof(idt_entries) - 1;
 	idtr.offset = reinterpret_cast<uint64_t>(idt_entries);
