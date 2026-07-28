@@ -16,12 +16,16 @@ extern "C" void kmain() {
 	call_global_constructors();
 
 	KernelHeap::init();
-	// apic::init();
-	// idt::setInterrupts();
+	apic::init();
+	idt::setInterrupts();
 
 	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
+
+	volatile uint32_t* fbbValue = new uint32_t;
+	fbbValue = framebuffer_address;
+	delete fbbValue;
 
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
