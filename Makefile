@@ -16,6 +16,8 @@ all: $(OUTPUT_IMAGE)
 	qemu-system-x86_64 \
 		-machine q35 \
 		-net none \
+		-enable-kvm \
+		-cpu host \
 		-drive if=pflash,format=raw,readonly=true,file=code.fd \
 		-drive if=pflash,format=raw,file=vars.fd \
 		-drive format=raw,file=$< \
@@ -41,7 +43,7 @@ kernel/obj/%.o: kernel/src/%.cpp
 
 kernel/obj/%.o: kernel/src/%.asm
 	@mkdir -p kernel/obj
-	nasm -f elf64 -i kernel/src $< -o $@
+	nasm -f elf64 -i kernel/src -g -F dwarf $< -o $@
 
 clean:
 	rm -rf \
