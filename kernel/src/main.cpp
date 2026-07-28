@@ -25,7 +25,6 @@ extern "C" void kmain() {
 
 	uint64_t* fbb = new uint64_t;
 	*fbb = reinterpret_cast<uint64_t>(framebuffer_address);
-	delete fbb;
 
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
