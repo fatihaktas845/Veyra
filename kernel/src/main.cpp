@@ -1,5 +1,7 @@
 #include "cxxabi.hpp"
 #include "KernelHeap.hpp"
+#include "apic.hpp"
+#include "idt.hpp"
 
 #include <limine.h>
 
@@ -14,6 +16,8 @@ extern "C" void kmain() {
 	call_global_constructors();
 
 	KernelHeap::init();
+	apic::init();
+	idt::setInterrupts();
 
 	limine_framebuffer* framebuffer = framebuffer_request.response->framebuffers[0];
 
@@ -21,6 +25,7 @@ extern "C" void kmain() {
 
 	uint64_t* fbb = new uint64_t;
 	*fbb = reinterpret_cast<uint64_t>(framebuffer_address);
+	delete fbb;
 
 	for (int y = 0; y < 100; y++) {
 		for (int x = 0; x < 100; x++) {
