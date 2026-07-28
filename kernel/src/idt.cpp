@@ -18,8 +18,8 @@ extern "C" {
 	void generalProtection() {
 		__asm__ volatile("movq $14, %%rax" : : : "rax");
 
-		while (1)
-			__asm__ volatile("hlt");
+		while (1);
+			// __asm__ volatile("hlt");
 	}
 
 	void pageFault() {

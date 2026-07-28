@@ -17,9 +17,12 @@ extern "C" void kmain() {
 
 	volatile uint32_t* framebuffer_address = (volatile uint32_t*)framebuffer->address;
 	
-	for (int y = 0; y < 100; y++) {
-		for (int x = 0; x < 100; x++) {
-			int pixel_index = x + (y * framebuffer->pitch / 4);
+	const uint64_t width = framebuffer->width;
+	const uint64_t height = framebuffer->height;
+
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			int pixel_index = x + (y * (framebuffer->pitch / 4));
 
 			framebuffer_address[pixel_index] = 0x00FFFFFF;
 		}
