@@ -22,7 +22,7 @@ extern "C" void kmain() {
 
 	for (uint64_t y = 0; y < height; y++) {
 		for (uint64_t x = 0; x < width; x++) {
-			int pixel_index = x + (y * (framebuffer->pitch / 4));
+			uint64_t pixel_index = x + (y * (framebuffer->pitch / 4));
 
 			framebuffer_address[pixel_index] = 0x00FFFFFF;
 		}
