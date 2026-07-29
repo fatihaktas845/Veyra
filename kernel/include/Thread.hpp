@@ -25,6 +25,8 @@ namespace Thread {
         uint64_t r14;
         uint64_t r15;
 
-        ControlBlock* next;
-    };
+        ControlBlock* next = nullptr;
+    } __attribute__((packed));
+
+    inline ControlBlock* list = nullptr;
 }
