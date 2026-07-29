@@ -1,11 +1,12 @@
 #include "Process.hpp"
 #include "VirtualMemoryManager.hpp"
 
+Process::ControlBlock* current = nullptr;
+
 extern VirtualMemoryManager kernelVMM;
+extern uint64_t kernel_stack_top[];
 
 void kernelMainThread();
-
-extern uint64_t kernel_stack_top[];
 
 void Process::init() {
     if (list)
@@ -28,4 +29,5 @@ void Process::init() {
     kernelProcess->ss  = 0x10ULL;
 
     list = kernelProcess;
+    current = kernelProcess;
 }
