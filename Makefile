@@ -17,7 +17,7 @@ all: $(OUTPUT_IMAGE)
 		-machine q35 \
 		-net none \
 		-enable-kvm \
-		-cpu host \
+		-cpu host,+x2apic \
 		-drive if=pflash,format=raw,readonly=true,file=code.fd \
 		-drive if=pflash,format=raw,file=vars.fd \
 		-drive format=raw,file=$< \
