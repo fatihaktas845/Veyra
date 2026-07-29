@@ -18,6 +18,7 @@ all: $(OUTPUT_IMAGE)
 		-net none \
 		-enable-kvm \
 		-cpu host,+x2apic \
+		-s -S \
 		-drive if=pflash,format=raw,readonly=true,file=code.fd \
 		-drive if=pflash,format=raw,file=vars.fd \
 		-drive format=raw,file=$< \
@@ -43,7 +44,7 @@ kernel/obj/%.o: kernel/src/%.cpp
 
 kernel/obj/%.o: kernel/src/%.asm
 	@mkdir -p kernel/obj
-	nasm -f elf64 -i kernel/src $< -o $@
+	nasm -f elf64 -i kernel/src -g -F dwarf $< -o $@
 
 clean:
 	rm -rf \

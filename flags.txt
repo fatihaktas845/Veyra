@@ -8,6 +8,7 @@
 -fno-threadsafe-statics
 -msoft-float
 -O0
+-g
 -mcmodel=kernel
 -I kernel/include
 -fno-pie

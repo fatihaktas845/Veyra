@@ -15,8 +15,16 @@ void Process::init() {
     ControlBlock* kernelProcess = new ControlBlock;
     kernelProcess->vmm = &kernelVMM;
 
-    kernelProcess->rsp = reinterpret_cast<uint64_t>(kernel_stack_top);
+    kernelProcess->rsp = reinterpret_cast<uint64_t>(kernel_stack_top) - 15ULL * 8ULL;
 
     list = kernelProcess;
     currentProcessControlBlock = kernelProcess;
+
+    __asm__ volatile (
+        "mov %0, %%rsp\n\t"
+        "jmp *%1\n\t"
+        : 
+        : "r"(kernelProcess->rsp), "r"(kernelMainThread)
+        : "memory"
+    );
 }

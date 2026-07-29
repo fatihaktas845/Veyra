@@ -18,7 +18,8 @@ section .text
 
         call timerInterrupt
 
-        
+        mov rax, [currentProcessControlBlock]
+        mov rsp, [rax]
 
         popall
         iretq
