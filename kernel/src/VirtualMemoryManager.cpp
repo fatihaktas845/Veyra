@@ -10,8 +10,8 @@ VirtualMemoryManager::VirtualMemoryManager() {
 		uint64_t cr3;
 
 		__asm__ volatile(
-				"movq %%cr3, %0"
-				: "=r"(cr3)
+			"movq %%cr3, %0"
+			: "=r"(cr3)
 		);
 
 		pa.raw = cr3 & ~0xFFFULL;
@@ -28,8 +28,8 @@ VirtualMemoryManager::VirtualMemoryManager(const VirtualAddress pml4) {
 		uint64_t cr3;
 
 		__asm__ volatile(
-				"movq %%cr3, %0"
-				: "=r"(cr3)
+			"movq %%cr3, %0"
+			: "=r"(cr3)
 		);
 
 		pa.raw = cr3 & ~0xFFFULL;
@@ -48,6 +48,22 @@ void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
 
 	for (uint64_t i = 256; i < 512; i++)
 		currentPml4Base[i] = kernelPml4Base[i];
+	
+	uint64_t cr3;
+
+	__asm__ volatile(
+		"mov %%cr3, %0"
+		: "=r"(cr3)
+	);
+
+	cr3 |= this->currentPml4.toPhysicalHhdmAddress().raw;
+
+	__asm__ volatile(
+		"mov %0, %%cr3"
+		:
+		: "r"(cr3)
+		: "memory"
+	);
 }
 
 void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags) {
