@@ -6,12 +6,7 @@ class VirtualMemoryManager;
 
 namespace Process {
     struct ControlBlock {
-        // iretq
-        uint64_t rip    = 0;
-        uint64_t cs     = 0;
-        uint64_t rflags = 0;
         uint64_t rsp    = 0;
-        uint64_t ss     = 0;
 
         /* Registers
         uint64_t rax = 0;

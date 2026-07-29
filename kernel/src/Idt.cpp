@@ -1,9 +1,12 @@
 #include "Idt.hpp"
 #include "Msr.hpp"
+#include "Process.hpp"
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
 uint64_t timerInterruptCounter = 0;
+
+extern Process::ControlBlock* currentProcessControlBlock;
 
 extern "C" {
 	void timerInterruptAsm();
@@ -38,6 +41,8 @@ extern "C" {
 
 	void timerInterrupt() {
 		timerInterruptCounter++;
+
+		currentProcessControlBlock = currentProcessControlBlock->next;
 
 		msr::write(IA32_X2APIC_EOI_MSR, 0);
 	}
