@@ -1,4 +1,4 @@
-#include "kstring.hpp"
+#include "Kstring.hpp"
 
 void* kstd::memset(void* dest, uint8_t c, uint64_t count) {
 	uint8_t* d = reinterpret_cast<uint8_t*>(dest);

@@ -1,7 +1,7 @@
 #include "cxxabi.hpp"
 #include "KernelHeap.hpp"
-#include "apic.hpp"
-#include "idt.hpp"
+#include "Apic.hpp"
+#include "Idt.hpp"
 
 #include <limine.h>
 

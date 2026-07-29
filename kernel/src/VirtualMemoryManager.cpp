@@ -1,6 +1,6 @@
 #include "VirtualMemoryManager.hpp"
 #include "PhysicalMemoryManager.hpp"
-#include "kstring.hpp"
+#include "Kstring.hpp"
 
 VirtualAddress VirtualMemoryManager::kernelPml4 = VirtualAddress(0);
 

@@ -1,7 +1,7 @@
 [BITS 64]
 DEFAULT ABS
 
-%include "macros.asm"
+%include "Macros.asm"
 
 extern divideError
 extern timerInterrupt

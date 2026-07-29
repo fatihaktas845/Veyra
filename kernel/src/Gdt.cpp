@@ -1,4 +1,4 @@
-#include "gdt.hpp"
+#include "Gdt.hpp"
 
 uint64_t gdtArray[7] = {};
 gdt::GDTR gdtr;

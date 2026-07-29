@@ -1,5 +1,5 @@
-#include "idt.hpp"
-#include "msr.hpp"
+#include "Idt.hpp"
+#include "Msr.hpp"
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;

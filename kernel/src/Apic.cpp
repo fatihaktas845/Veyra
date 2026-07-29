@@ -1,5 +1,5 @@
-#include "apic.hpp"
-#include "msr.hpp"
+#include "Apic.hpp"
+#include "Msr.hpp"
 
 void apic::init() {
     uint64_t apicBase = msr::read(IA32_APIC_BASE_MSR);
