@@ -2,16 +2,16 @@
 
 uint64_t gdtArray[7] = {};
 gdt::GDTR gdtr;
-gdt::TSS tss;
+gdt::TSS globalTss;
 
 extern "C" uint64_t kernel_stack_top[];
 extern "C" uint64_t double_fault_stack_top[];
 
 extern "C" void initGdt() {
-    tss.rsp[0] = reinterpret_cast<uint64_t>(kernel_stack_top);
-    tss.ist[0] = reinterpret_cast<uint64_t>(double_fault_stack_top);
+    globalTss.rsp[0] = reinterpret_cast<uint64_t>(kernel_stack_top);
+    globalTss.ist[0] = reinterpret_cast<uint64_t>(double_fault_stack_top);
 
-    uint64_t base = reinterpret_cast<uint64_t>(&tss);
+    uint64_t base = reinterpret_cast<uint64_t>(&globalTss);
     uint64_t limit = sizeof(gdt::TSS) - 1;
 
     gdt::setEntry(1, 0x9B, 0xA); // Kernel-Code Segment
