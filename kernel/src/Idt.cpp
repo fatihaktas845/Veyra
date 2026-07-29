@@ -8,6 +8,8 @@ uint64_t timerInterruptCounter = 0;
 
 extern Process::ControlBlock* currentProcessControlBlock;
 
+const uint16_t COM1_PORT = 0x3F8;
+
 extern "C" {
 	void timerInterruptAsm();
 
@@ -21,12 +23,26 @@ extern "C" {
 	void generalProtection() {
 		__asm__ volatile("movq $14, %%rax" : : : "rax");
 
+		__asm__ volatile (
+		    "outb %0, %1"
+		    :
+		    : "a"((uint8_t)'g'), "Nd"((uint16_t)COM1_PORT)
+		    : "memory"
+		);
+
 		while (1);
 			// __asm__ volatile("hlt");
 	}
 
 	void pageFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
+
+		__asm__ volatile (
+		    "outb %0, %1"
+		    :
+		    : "a"((uint8_t)'p'), "Nd"((uint16_t)COM1_PORT)
+		    : "memory"
+		);
 
 		while (1);
 			// __asm__ volatile("hlt");
@@ -35,14 +51,31 @@ extern "C" {
 	void doubleFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
+		__asm__ volatile (
+		    "outb %0, %1"
+		    :
+		    : "a"((uint8_t)'d'), "Nd"((uint16_t)COM1_PORT)
+		    : "memory"
+		);
+
 		while (1)
 			__asm__ volatile("hlt");
 	}
 
 	void timerInterrupt() {
+		__asm__ volatile (
+		    "outb %0, %1"
+		    :
+		    : "a"((uint8_t)'p'), "Nd"((uint16_t)COM1_PORT)
+		    : "memory"
+		);
+		
 		timerInterruptCounter++;
 
-		currentProcessControlBlock = currentProcessControlBlock->next;
+		if (currentProcessControlBlock->next)
+			currentProcessControlBlock = currentProcessControlBlock->next;
+		else
+			currentProcessControlBlock = Process::list;
 
 		msr::write(IA32_X2APIC_EOI_MSR, 0);
 	}
