@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+class VirtualMemoryManager;
+
 namespace Process {
     struct ControlBlock {
         // iretq
@@ -29,7 +31,7 @@ namespace Process {
         uint64_t r15 = 0;
 
         uint64_t pid = 0;
-        uint64_t cr3 = 0;
+        VirtualMemoryManager* vmm = nullptr;
 
         ControlBlock* next = nullptr;
     } __attribute__((packed));
