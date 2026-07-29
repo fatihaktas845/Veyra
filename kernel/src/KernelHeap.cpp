@@ -6,10 +6,10 @@ namespace {
     uint64_t KERNEL_HEAP_END = KERNEL_HEAP_START;
     // uint64_t KERNEL_HEAP_PML4_INDEX = 300;
 
-    VirtualMemoryManager kernelVMM; 
-
     KernelHeap::BlockHeader* linkedList = nullptr;
 }
+
+VirtualMemoryManager kernelVMM;
 
 void KernelHeap::init() {
     PhysicalMemoryManager::init();
