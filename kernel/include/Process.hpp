@@ -13,7 +13,7 @@ namespace Process {
         uint64_t rsp    = 0;
         uint64_t ss     = 0;
 
-        // Registers
+        /* Registers
         uint64_t rax = 0;
         uint64_t rbx = 0;
         uint64_t rcx = 0;
@@ -28,7 +28,7 @@ namespace Process {
         uint64_t r12 = 0;
         uint64_t r13 = 0;
         uint64_t r14 = 0;
-        uint64_t r15 = 0;
+        uint64_t r15 = 0; */
 
         uint64_t pid = 0;
         VirtualMemoryManager* vmm = nullptr;
