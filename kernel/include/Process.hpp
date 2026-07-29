@@ -37,4 +37,6 @@ namespace Process {
     } __attribute__((packed));
 
     inline ControlBlock* list = nullptr;
+
+    void init();
 }
