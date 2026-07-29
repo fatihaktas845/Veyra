@@ -1,9 +1,11 @@
 #include "Process.hpp"
-#include "KernelHeap.hpp"
+
+void kernelMainThread();
 
 void Process::init() {
     if (list)
         return;
     
-    
+    ControlBlock* newBlock = new ControlBlock;
+    list = newBlock;
 }
