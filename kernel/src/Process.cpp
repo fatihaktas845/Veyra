@@ -20,9 +20,10 @@ void Process::init() {
     list = kernelProcess;
     currentProcessControlBlock = kernelProcess;
     lastBlock = kernelProcess;
+    kernelProcess->next = kernelProcess;
 }
 
-void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUser = false) {
+void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUser) {
     ControlBlock* newBlock = new ControlBlock;
 
     uint64_t* pst = reinterpret_cast<uint64_t*>(rspTop);
@@ -46,6 +47,8 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;
+
     lastBlock->next = newBlock;
     lastBlock = newBlock;
+    lastBlock->next = list;
 }
