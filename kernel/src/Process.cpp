@@ -38,8 +38,8 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     );
     rflags |= 1ULL << 9;
     *(--pst) = rflags; // RFLAGS
-    *(--pst) = isUser ? 0x23ULL : 0x08ULL;
-    *(--pst) = rip;
+    *(--pst) = isUser ? 0x23ULL : 0x08ULL; // CS
+    *(--pst) = rip; // RIP
 
     for (uint64_t i = 0; i < 15; i++)
         *(--pst) = 0ULL;
