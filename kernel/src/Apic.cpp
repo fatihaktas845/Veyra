@@ -15,5 +15,5 @@ void apic::init() {
     // LAPIC Timer
     msr::write(IA32_X2APIC_DIV_CONF_MSR, 0x3ULL);
     msr::write(IA32_X2APIC_LVT_TIMER_MSR, (1ULL << 17) | 0x20ULL);
-    msr::write(IA32_X2APIC_INIT_COUNT_MSR, 20'000'000ULL);
+    msr::write(IA32_X2APIC_INIT_COUNT_MSR, 400'000ULL);
 }
