@@ -20,5 +20,7 @@ namespace io {
             : "Nd"(port)
             : "memory"
         );
+
+        return value;
     }
 }
