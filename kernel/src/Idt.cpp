@@ -66,16 +66,13 @@ extern "C" {
 		__asm__ volatile (
 		    "outb %0, %1"
 		    :
-		    : "a"((uint8_t)'p'), "Nd"((uint16_t)COM1_PORT)
+		    : "a"((uint8_t)'t'), "Nd"((uint16_t)COM1_PORT)
 		    : "memory"
 		);
 		
 		timerInterruptCounter++;
 
-		if (currentProcessControlBlock->next)
-			currentProcessControlBlock = currentProcessControlBlock->next;
-		else
-			currentProcessControlBlock = Process::list;
+		currentProcessControlBlock = currentProcessControlBlock->next;
 
 		msr::write(IA32_X2APIC_EOI_MSR, 0);
 	}

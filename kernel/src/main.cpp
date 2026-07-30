@@ -16,6 +16,8 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 volatile uint32_t* framebuffer_address = nullptr;
 uint64_t pitch;
 
+void kernelMainThread();
+
 extern "C" void kmain() {
 	call_global_constructors();
 
@@ -44,6 +46,8 @@ extern "C" void kmain() {
 	Process::init();
 	apic::init();
 	idt::setInterrupts();
+	
+	kernelMainThread();
 	
 	while (1)
 		__asm__ volatile("hlt" : : :);
