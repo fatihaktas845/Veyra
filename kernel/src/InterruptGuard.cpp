@@ -2,10 +2,8 @@
 
 #define RFLAGS_IF_BIT (1ULL << 9)
 
-uint64_t InterruptGuard::rflags = 0;
-
 InterruptGuard::InterruptGuard() {
-    this->rflags = loadRflags();
+    loadRflags();
     clearInterrupts();
 }
 
@@ -14,7 +12,7 @@ InterruptGuard::~InterruptGuard() {
         setInterrupts();
 }
 
-uint64_t InterruptGuard::loadRflags() {
+void InterruptGuard::loadRflags() {
     __asm__ volatile(
         "pushfq\n\t"
         "pop %0\n\t"

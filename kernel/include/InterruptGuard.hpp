@@ -4,9 +4,9 @@
 
 class InterruptGuard {
 private:
-    static uint64_t rflags;
+    uint64_t rflags = 0;
 
-    [[nodiscard]] uint64_t loadRflags();
+    void loadRflags();
     void setRflags(const uint64_t rflags);
 
 public:
