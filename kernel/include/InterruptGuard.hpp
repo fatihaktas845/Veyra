@@ -19,6 +19,6 @@ public:
     InterruptGuard(InterruptGuard&&) = delete;
     InterruptGuard& operator=(InterruptGuard&&) = delete;
 
-    void setInterrupts();
-    void clearInterrupts();
+    static void setInterrupts();
+    static void clearInterrupts();
 };
