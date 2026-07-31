@@ -1,7 +1,7 @@
 #include "cxxabi.hpp"
 #include "KernelHeap.hpp"
 #include "Apic.hpp"
-#include "Idt.hpp"
+#include "InterruptGuard.hpp"
 #include "Process.hpp"
 
 #include <limine.h>
@@ -45,6 +45,7 @@ extern "C" void kmain() {
 
 	Process::init();
 	apic::init();
+	InterruptGuard::setInterrupts();
 	
 	kernelMainThread();
 	
