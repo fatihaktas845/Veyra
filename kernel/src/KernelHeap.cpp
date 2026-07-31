@@ -1,5 +1,6 @@
 #include "KernelHeap.hpp"
 #include "PhysicalMemoryManager.hpp"
+#include "InterruptGuard.hpp"
 
 namespace {
     uint64_t KERNEL_HEAP_START = 0xFFFF'9600'0000'0000ULL;
@@ -48,7 +49,10 @@ bool KernelHeap::expand(const uint64_t pageCount) {
 }
 
 VirtualAddress KernelHeap::alloc(const uint64_t size) {
-    if (size == 0) return VirtualAddress(0);
+    [[maybe_unused]] InterruptGuard interruptGuard;
+
+    if (size == 0)
+        return VirtualAddress(0);
 
     const uint64_t alignedSize = (size + 7) & ~7;
     BlockHeader* current = linkedList;
@@ -114,6 +118,8 @@ VirtualAddress KernelHeap::alloc(const uint64_t size) {
 }
 
 void KernelHeap::free(const VirtualAddress addr) {
+    [[maybe_unused]] InterruptGuard interruptGuard;
+    
     if (addr.raw == 0)
         return;
 

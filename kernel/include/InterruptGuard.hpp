@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-class InterruptGuard {
+class [[nodiscard]] InterruptGuard {
 private:
     uint64_t rflags = 0;
 
