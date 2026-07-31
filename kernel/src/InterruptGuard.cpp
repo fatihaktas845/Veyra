@@ -3,13 +3,13 @@
 #define RFLAGS_IF_BIT (1ULL << 9)
 
 InterruptGuard::InterruptGuard() {
-    loadRflags();
-    clearInterrupts();
+    this->loadRflags();
+    this->clearInterrupts();
 }
 
 InterruptGuard::~InterruptGuard() {
     if (this->rflags & RFLAGS_IF_BIT)
-        setInterrupts();
+        this->setInterrupts();
 }
 
 void InterruptGuard::loadRflags() {
