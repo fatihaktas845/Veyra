@@ -29,4 +29,7 @@ class VirtualMemoryManager {
 
 		bool allocPage(const VirtualAddress pageAddr, const uint64_t flags);
 		void freePage(const VirtualAddress pageAddr);
+
+		void loadCr3();
+		[[nodiscard]] uint64_t getCr3();
 };
