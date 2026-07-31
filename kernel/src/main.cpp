@@ -45,7 +45,6 @@ extern "C" void kmain() {
 
 	Process::init();
 	apic::init();
-	idt::setInterrupts();
 	
 	kernelMainThread();
 	
