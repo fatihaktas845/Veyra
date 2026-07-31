@@ -15,7 +15,7 @@ InterruptGuard::~InterruptGuard() {
 void InterruptGuard::loadRflags() {
     __asm__ volatile(
         "pushfq\n\t"
-        "pop %0\n\t"
+        "popq %0\n\t"
         : "=r"(this->rflags)
         :
         : "memory"
@@ -24,7 +24,7 @@ void InterruptGuard::loadRflags() {
 
 void InterruptGuard::setRflags(const uint64_t rflags) {
     __asm__ volatile(
-        "push %0\n\t"
+        "pushq %0\n\t"
         "popfq\n\t"
         :
         : "r"(rflags)
