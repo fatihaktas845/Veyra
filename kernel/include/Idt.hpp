@@ -20,9 +20,15 @@ namespace idt {
 
 	void setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute);
 
+	inline uint64_t rflags = 0;
+
 	inline void clearInterrupts() {
 		__asm__ volatile(
-			"cli": : : "memory"
+			"pushfq\n\t"
+			"pop %0"
+			: "=r"(rflags)
+			:
+			: "memory"
 		);
 	}
 
