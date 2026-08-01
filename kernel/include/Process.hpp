@@ -5,6 +5,12 @@
 class VirtualMemoryManager;
 
 namespace Process {
+    enum class State {
+        RUNNING,
+        SLEEPING,
+        TERMINATED
+    };
+
     struct ControlBlock {
         uint64_t rsp    = 0;
 

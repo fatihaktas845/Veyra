@@ -1,5 +1,6 @@
 #include "Process.hpp"
 #include "VirtualMemoryManager.hpp"
+#include "InterruptGuard.hpp"
 
 Process::ControlBlock* currentProcessControlBlock;
 
@@ -24,6 +25,8 @@ void Process::init() {
 }
 
 void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUser) {
+    [[maybe_unused]] InterruptGuard interruptGuard;
+
     ControlBlock* newBlock = new ControlBlock;
 
     uint64_t* pst = reinterpret_cast<uint64_t*>(rspTop);
@@ -32,7 +35,7 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     uint64_t rflags;
     __asm__ volatile(
         "pushfq\n\t"
-        "pop %0\n\t"
+        "popq %0\n\t"
         : "=r"(rflags)
         :
         : "memory"
