@@ -61,5 +61,7 @@ void Process::sleep(const uint64_t ms) {
 }
 
 void Process::scheduler() {
+    [[maybe_unused]] InterruptGuard interruptGuard;
 
+    currentProcessControlBlock = currentProcessControlBlock->next;
 }

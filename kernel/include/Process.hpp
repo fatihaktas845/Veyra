@@ -17,7 +17,7 @@ namespace Process {
 
     inline ControlBlock* readyQueue = nullptr;
     inline ControlBlock* sleepQueue = nullptr;
-    
+
     inline ControlBlock* lastBlock = nullptr;
     inline uint64_t lastPid = 0;
 
