@@ -10,7 +10,7 @@ extern uint64_t kernel_stack_top[];
 void kernelMainThread();
 
 void Process::init() {
-    if (list)
+    if (readyQueue)
         return;
     
     ControlBlock* kernelProcess = new ControlBlock;
@@ -18,7 +18,7 @@ void Process::init() {
     kernelProcess->rsp = reinterpret_cast<uint64_t>(kernel_stack_top);
     kernelProcess->pid = lastPid++;
 
-    list = kernelProcess;
+    readyQueue = kernelProcess;
     currentProcessControlBlock = kernelProcess;
     lastBlock = kernelProcess;
     kernelProcess->next = kernelProcess;
@@ -53,9 +53,13 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
 
     lastBlock->next = newBlock;
     lastBlock = newBlock;
-    lastBlock->next = list;
+    lastBlock->next = readyQueue;
 }
 
 void Process::sleep(const uint64_t ms) {
+
+}
+
+void Process::scheduler() {
 
 }
