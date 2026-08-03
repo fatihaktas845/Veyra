@@ -17,6 +17,7 @@ void Process::init() {
     kernelProcess->vmm = &kernelVMM;
     kernelProcess->rsp = reinterpret_cast<uint64_t>(kernel_stack_top);
     kernelProcess->pid = lastPid++;
+    kernelProcess->state = State::Running;
 
     list = kernelProcess;
     currentProcessControlBlock = kernelProcess;
@@ -50,6 +51,7 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;
+    newBlock->state = State::Running;
 
     lastBlock->next = newBlock;
     lastBlock = newBlock;

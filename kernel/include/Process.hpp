@@ -6,9 +6,9 @@ class VirtualMemoryManager;
 
 namespace Process {
     enum class State {
-        RUNNING,
-        SLEEPING,
-        TERMINATED
+        Running,
+        Sleeping,
+        Terminated
     };
 
     struct ControlBlock {
@@ -16,6 +16,7 @@ namespace Process {
 
         uint64_t pid = 0;
         VirtualMemoryManager* vmm = nullptr;
+        State state = State::Running;
 
         ControlBlock* next = nullptr;
     } __attribute__((packed));
