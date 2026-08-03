@@ -4,7 +4,7 @@
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
-uint64_t timerInterruptCounter = 0;
+volatile uint64_t timerInterruptCounter = 0;
 
 extern Process::ControlBlock* currentProcessControlBlock;
 
