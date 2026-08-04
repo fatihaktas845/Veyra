@@ -2,6 +2,7 @@
 #include "VirtualMemoryManager.hpp"
 #include "InterruptGuard.hpp"
 #include "Msr.hpp"
+#include "Kstring.hpp"
 
 Process::ControlBlock* currentProcessControlBlock;
 
@@ -55,23 +56,39 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
 
     lastReadyBlock->next = newBlock;
     newBlock->prev = lastReadyBlock;
+    newBlock->next = readyQueue;
+    readyQueue->prev = newBlock;
     lastReadyBlock = newBlock;
-    lastReadyBlock->next = readyQueue;
-    readyQueue->prev = lastReadyBlock;
 }
 
 void Process::sleep(const uint64_t ms) {
     [[maybe_unused]] InterruptGuard interruptGuard;
 
-    currentProcessControlBlock->sleepTime = timerInterruptCounter + ms;
+    ControlBlock* newSleepBlock = new ControlBlock;
+    kstd::memcpy(newSleepBlock, currentProcessControlBlock, sizeof(ControlBlock));
 
-    
+    newSleepBlock->sleepTime = timerInterruptCounter + ms;
+
+    currentProcessControlBlock->prev->next = currentProcessControlBlock->next;
+    currentProcessControlBlock->next->prev = currentProcessControlBlock->prev;
+
+    if (sleepBlockCount > 0) {
+        lastSleepBlock->next = newSleepBlock;
+        newSleepBlock->prev = lastSleepBlock;
+    } else
+        sleepQueue = newSleepBlock;
+
+    newSleepBlock->next = sleepQueue;
+    sleepQueue->prev = newSleepBlock;
+    lastSleepBlock = newSleepBlock;
+
+    sleepBlockCount++;
+
+    scheduler();
 }
 
 void Process::scheduler() {
     [[maybe_unused]] InterruptGuard interruptGuard;
-
-    currentProcessControlBlock = currentProcessControlBlock->next;
 
     msr::write(IA32_X2APIC_SELF_IPI_MSR, 0x20);
 }

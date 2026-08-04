@@ -21,6 +21,7 @@ namespace Process {
 
     inline ControlBlock* lastReadyBlock = nullptr;
     inline ControlBlock* lastSleepBlock = nullptr;
+    inline uint64_t sleepBlockCount = 0;
     inline uint64_t lastPid = 0;
 
     void init();
