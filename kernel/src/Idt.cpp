@@ -1,6 +1,7 @@
 #include "Idt.hpp"
 #include "Msr.hpp"
 #include "Process.hpp"
+#include "Io.hpp"
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
@@ -23,12 +24,7 @@ extern "C" {
 	void generalProtection() {
 		__asm__ volatile("movq $14, %%rax" : : : "rax");
 
-		__asm__ volatile (
-		    "outb %0, %1"
-		    :
-		    : "a"((uint8_t)'g'), "Nd"((uint16_t)COM1_PORT)
-		    : "memory"
-		);
+		io::outb(COM1_PORT, 'g');
 
 		while (1);
 			// __asm__ volatile("hlt");
@@ -37,12 +33,7 @@ extern "C" {
 	void pageFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		__asm__ volatile (
-		    "outb %0, %1"
-		    :
-		    : "a"((uint8_t)'p'), "Nd"((uint16_t)COM1_PORT)
-		    : "memory"
-		);
+		io::outb(COM1_PORT, 'p');
 
 		while (1);
 			// __asm__ volatile("hlt");
@@ -51,24 +42,14 @@ extern "C" {
 	void doubleFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		__asm__ volatile (
-		    "outb %0, %1"
-		    :
-		    : "a"((uint8_t)'d'), "Nd"((uint16_t)COM1_PORT)
-		    : "memory"
-		);
+		io::outb(COM1_PORT, 'd');
 
 		while (1)
 			__asm__ volatile("hlt");
 	}
 
 	void timerInterrupt() {
-		__asm__ volatile (
-		    "outb %0, %1"
-		    :
-		    : "a"((uint8_t)'t'), "Nd"((uint16_t)COM1_PORT)
-		    : "memory"
-		);
+		io::outb(COM1_PORT, 't');
 		
 		timerInterruptCounter++;
 
