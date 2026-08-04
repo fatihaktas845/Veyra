@@ -66,5 +66,5 @@ void Process::scheduler() {
 
     currentProcessControlBlock = currentProcessControlBlock->next;
 
-    // Not Finished!!!
+    msr::write(IA32_X2APIC_SELF_IPI_MSR, 0x20);
 }
