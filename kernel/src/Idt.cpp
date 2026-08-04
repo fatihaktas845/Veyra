@@ -6,7 +6,7 @@
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
-volatile uint64_t timerInterruptCounter = 0;
+uint64_t timerInterruptCounter = 0;
 
 extern Process::ControlBlock* currentProcessControlBlock;
 
@@ -61,12 +61,24 @@ extern "C" {
 				Process::ControlBlock* newBlock = new Process::ControlBlock;
 				kstd::memcpy(newBlock, currentSleepBlock, sizeof(Process::ControlBlock));
 
-				if (currentSleepBlock->prev)
+				if (currentSleepBlock->prev) {
 					currentSleepBlock->prev->next = currentSleepBlock->next;
+					Process::lastSleepBlock = currentSleepBlock->prev;
+				}
 				if (currentSleepBlock->next)
 					currentSleepBlock->next->prev = currentSleepBlock->prev;
 				
+				if (Process::readyQueue) {
+					Process::lastReadyBlock->next = newBlock;
+					newBlock->prev = Process::lastReadyBlock;
+				} else
+					Process::readyQueue = newBlock;
 				
+				Process::readyQueue->prev = newBlock;
+				newBlock->next = Process::readyQueue;
+				Process::lastReadyBlock = newBlock;
+
+				Process::sleepBlockCount--;
 			}
 		}
 

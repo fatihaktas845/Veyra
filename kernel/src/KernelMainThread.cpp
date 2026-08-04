@@ -42,6 +42,16 @@ void processTwo() {
 		}
 	}
 
+	Process::sleep(5000);
+
+	for (uint64_t y = 200; y < height + 200; y++) {
+		for (uint64_t x = 200; x < width + 200; x++) {
+			uint64_t pixel_index = x + (y * (pitch / 4));
+
+			framebuffer_address[pixel_index] = 0x00000000;
+		}
+	}
+
     while (true)
         __asm__ volatile("hlt");
 }
