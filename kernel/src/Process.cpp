@@ -7,6 +7,7 @@ Process::ControlBlock* currentProcessControlBlock;
 
 extern VirtualMemoryManager kernelVMM;
 extern uint64_t kernel_stack_top[];
+extern uint64_t timerInterruptCounter;
 
 void kernelMainThread();
 
@@ -21,7 +22,7 @@ void Process::init() {
 
     readyQueue = kernelProcess;
     currentProcessControlBlock = kernelProcess;
-    lastBlock = kernelProcess;
+    lastReadyBlock = kernelProcess;
     kernelProcess->next = kernelProcess;
 }
 
@@ -52,13 +53,19 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;
 
-    lastBlock->next = newBlock;
-    lastBlock = newBlock;
-    lastBlock->next = readyQueue;
+    lastReadyBlock->next = newBlock;
+    newBlock->prev = lastReadyBlock;
+    lastReadyBlock = newBlock;
+    lastReadyBlock->next = readyQueue;
+    readyQueue->prev = lastReadyBlock;
 }
 
 void Process::sleep(const uint64_t ms) {
-    // Not Started yet!!!
+    [[maybe_unused]] InterruptGuard interruptGuard;
+
+    currentProcessControlBlock->sleepTime = timerInterruptCounter + ms;
+
+    // Not Finished!!!
 }
 
 void Process::scheduler() {

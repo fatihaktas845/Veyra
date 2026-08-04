@@ -12,13 +12,15 @@ namespace Process {
         VirtualMemoryManager* vmm = nullptr;
         uint64_t sleepTime = 0;
 
+        ControlBlock* prev = nullptr;
         ControlBlock* next = nullptr;
     } __attribute__((packed));
 
     inline ControlBlock* readyQueue = nullptr;
     inline ControlBlock* sleepQueue = nullptr;
 
-    inline ControlBlock* lastBlock = nullptr;
+    inline ControlBlock* lastReadyBlock = nullptr;
+    inline ControlBlock* lastSleepBlock = nullptr;
     inline uint64_t lastPid = 0;
 
     void init();
