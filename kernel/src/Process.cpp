@@ -69,8 +69,13 @@ void Process::sleep(const uint64_t ms) {
 
     newSleepBlock->sleepTime = timerInterruptCounter + ms;
 
-    currentProcessControlBlock->prev->next = currentProcessControlBlock->next;
-    currentProcessControlBlock->next->prev = currentProcessControlBlock->prev;
+    if (readyQueue == currentProcessControlBlock) {
+        readyQueue = nullptr;
+        lastReadyBlock = nullptr;
+    } else {
+        currentProcessControlBlock->prev->next = currentProcessControlBlock->next;
+        currentProcessControlBlock->next->prev = currentProcessControlBlock->prev;
+    }
 
     if (sleepBlockCount > 0) {
         lastSleepBlock->next = newSleepBlock;
