@@ -2,6 +2,7 @@
 #include "Msr.hpp"
 #include "Process.hpp"
 #include "Io.hpp"
+#include "Kstring.hpp"
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
@@ -52,6 +53,22 @@ extern "C" {
 		io::outb(COM1_PORT, 't');
 		
 		timerInterruptCounter++;
+
+		for (uint64_t i = 0; i < Process::sleepBlockCount; i++) {
+			Process::ControlBlock* currentSleepBlock = Process::sleepQueue;
+
+			if (timerInterruptCounter >= currentSleepBlock->sleepTime) {
+				Process::ControlBlock* newBlock = new Process::ControlBlock;
+				kstd::memcpy(newBlock, currentSleepBlock, sizeof(Process::ControlBlock));
+
+				if (currentSleepBlock->prev)
+					currentSleepBlock->prev->next = currentSleepBlock->next;
+				if (currentSleepBlock->next)
+					currentSleepBlock->next->prev = currentSleepBlock->prev;
+				
+				
+			}
+		}
 
 		currentProcessControlBlock = currentProcessControlBlock->next;
 
