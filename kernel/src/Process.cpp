@@ -78,8 +78,6 @@ void Process::sleep(const uint64_t ms) {
     } else
         sleepQueue = newSleepBlock;
 
-    newSleepBlock->next = sleepQueue;
-    sleepQueue->prev = newSleepBlock;
     lastSleepBlock = newSleepBlock;
 
     sleepBlockCount++;
