@@ -2,9 +2,10 @@
 
 #include <stdint.h>
 
-#define IA32_APIC_BASE_MSR  0x1B
-#define IA32_X2APIC_SIV_MSR 0x80F
-#define IA32_X2APIC_EOI_MSR 0x80B
+#define IA32_APIC_BASE_MSR       0x1B
+#define IA32_X2APIC_SIV_MSR      0x80F
+#define IA32_X2APIC_EOI_MSR      0x80B
+#define IA32_X2APIC_SELF_IPI_MSR 0x83F
 
 // LAPIC Timer MSRs
 #define IA32_X2APIC_LVT_TIMER_MSR  0x832
