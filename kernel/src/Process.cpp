@@ -1,6 +1,7 @@
 #include "Process.hpp"
 #include "VirtualMemoryManager.hpp"
 #include "InterruptGuard.hpp"
+#include "Msr.hpp"
 
 Process::ControlBlock* currentProcessControlBlock;
 
