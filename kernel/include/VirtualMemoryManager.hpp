@@ -13,13 +13,13 @@
 
 class VirtualMemoryManager {
 	private:
-		static VirtualAddress kernelPml4;
 		VirtualAddress currentPml4 = VirtualAddress(0);
 	
 	public:
 		VirtualMemoryManager();
 
 		void setPml4(const VirtualAddress pml4);
+		[[nodiscard]] VirtualAddress getPml4() const;
 
 		void mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags);
 		void unmapPage(const VirtualAddress va);

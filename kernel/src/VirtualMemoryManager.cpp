@@ -2,36 +2,32 @@
 #include "PhysicalMemoryManager.hpp"
 #include "Kstring.hpp"
 
-VirtualAddress VirtualMemoryManager::kernelPml4 = VirtualAddress(0);
-
 VirtualMemoryManager::VirtualMemoryManager() {
-	if (this->kernelPml4.raw == 0) {
-		PhysicalAddress pa;
-		uint64_t cr3;
+	const uint64_t cr3 = getCr3();
+	const uint64_t pml4Phys = cr3 & 0x000FFFFFFFFFF000ULL;
+	PhysicalAddress p(pml4Phys);
+	this->currentPml4 = p.toVirtualHhdmAddress();
 
-		__asm__ volatile(
-			"movq %%cr3, %0"
-			: "=r"(cr3)
-		);
-
-		pa.raw = cr3 & ~0xFFFULL;
-		
-		this->kernelPml4 = pa.toVirtualHhdmAddress();
-	}
-
-	this->currentPml4 = this->kernelPml4;
+	/* PhysicalAddress pa(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
+	this->setPml4(pa.toVirtualHhdmAddress());*/
 }
 
 void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
 	this->currentPml4 = pml4;
 
-	const uint64_t* const kernelPml4Base = this->kernelPml4.asPtr<uint64_t>();
+	const uint64_t cr3 = getCr3();
+	const uint64_t pml4Phys = cr3 & 0x000FFFFFFFFFF000ULL;
+	PhysicalAddress pa(pml4Phys);
+
+	const uint64_t* const kernelPml4Base = pa.toVirtualHhdmAddress().asPtr<uint64_t>();
 	uint64_t* const currentPml4Base = this->currentPml4.asPtr<uint64_t>();
 
 	for (uint64_t i = 256; i < 512; i++)
 		currentPml4Base[i] = kernelPml4Base[i];
-	
-	this->loadCr3();
+}
+
+VirtualAddress VirtualMemoryManager::getPml4() const {
+	return this->currentPml4;
 }
 
 void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags) {
