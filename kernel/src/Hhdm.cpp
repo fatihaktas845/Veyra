@@ -9,10 +9,6 @@ static volatile struct limine_hhdm_request hhdmRequest = {
 	.response = nullptr
 };
 
-namespace hhdm {
-	uint64_t offset;
-
-	void init() {
-		offset = hhdmRequest.response->offset;
-	}
+void hhdm::init() {
+	offset = hhdmRequest.response->offset;
 }

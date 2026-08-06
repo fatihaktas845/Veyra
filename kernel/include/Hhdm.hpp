@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 namespace hhdm {
-	extern uint64_t offset;
-
+	inline uint64_t offset = 0;
+	
 	void init();
 }
