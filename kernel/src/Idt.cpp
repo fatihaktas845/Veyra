@@ -3,6 +3,7 @@
 #include "Process.hpp"
 #include "Io.hpp"
 #include "Kstring.hpp"
+#include "VirtualMemoryManager.hpp"
 
 static idt::entry idt_entries[256] = {};
 idt::descriptor idtr;
