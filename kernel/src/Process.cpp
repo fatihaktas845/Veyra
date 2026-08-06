@@ -53,7 +53,7 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     
     VirtualMemoryManager* newVmm = new VirtualMemoryManager();
     newBlock->vmm = newVmm;
-    newBlock->cr3 = VirtualMemoryManager::getCr3();
+    newBlock->cr3 = newVmm->getPml4().toPhysicalHhdmAddress().raw;
 
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;
