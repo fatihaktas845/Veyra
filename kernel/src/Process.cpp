@@ -24,7 +24,6 @@ void Process::init() {
     readyQueue = kernelProcess;
     currentProcessControlBlock = kernelProcess;
     lastReadyBlock = kernelProcess;
-    kernelProcess->next = kernelProcess;
 }
 
 void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUser) {
@@ -54,40 +53,16 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;
 
-    lastReadyBlock->next = newBlock;
-    newBlock->prev = lastReadyBlock;
-    newBlock->next = readyQueue;
-    readyQueue->prev = newBlock;
+    lastReadyBlock->readyNext = newBlock;
+    newBlock->readyPrev = lastReadyBlock;
+    newBlock->readyNext = nullptr;
     lastReadyBlock = newBlock;
 }
 
 void Process::sleep(const uint64_t ms) {
     [[maybe_unused]] InterruptGuard interruptGuard;
 
-    ControlBlock* newSleepBlock = new ControlBlock;
-    kstd::memcpy(newSleepBlock, currentProcessControlBlock, sizeof(ControlBlock));
-
-    newSleepBlock->sleepTime = timerInterruptCounter + ms;
-
-    if (readyQueue == currentProcessControlBlock) {
-        readyQueue = nullptr;
-        lastReadyBlock = nullptr;
-    } else {
-        currentProcessControlBlock->prev->next = currentProcessControlBlock->next;
-        currentProcessControlBlock->next->prev = currentProcessControlBlock->prev;
-    }
-
-    if (sleepBlockCount > 0) {
-        lastSleepBlock->next = newSleepBlock;
-        newSleepBlock->prev = lastSleepBlock;
-    } else
-        sleepQueue = newSleepBlock;
-
-    lastSleepBlock = newSleepBlock;
-
-    sleepBlockCount++;
-
-    scheduler();
+    (void)ms;
 }
 
 void Process::scheduler() {

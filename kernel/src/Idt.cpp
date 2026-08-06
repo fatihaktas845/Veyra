@@ -27,8 +27,8 @@ extern "C" {
 
 		io::outb(COM1_PORT, 'g');
 
-		while (1);
-			// __asm__ volatile("hlt");
+		while (1)
+			__asm__ volatile("hlt");
 	}
 
 	void pageFault() {
@@ -36,8 +36,8 @@ extern "C" {
 
 		io::outb(COM1_PORT, 'p');
 
-		while (1);
-			// __asm__ volatile("hlt");
+		while (1)
+			__asm__ volatile("hlt");
 	}
 
 	void doubleFault() {
@@ -54,9 +54,10 @@ extern "C" {
 		
 		timerInterruptCounter++;
 
-		for (uint64_t i = 0; i < Process::sleepBlockCount; i++) {
-			Process::ControlBlock* currentSleepBlock = Process::sleepQueue;
-
+		/*const uint64_t sbc = Process::sleepBlockCount;
+		Process::ControlBlock* currentSleepBlock = Process::sleepQueue;
+		
+		for (uint64_t i = 0; i < sbc; i++) {
 			if (timerInterruptCounter >= currentSleepBlock->sleepTime) {
 				Process::ControlBlock* newBlock = new Process::ControlBlock;
 				kstd::memcpy(newBlock, currentSleepBlock, sizeof(Process::ControlBlock));
@@ -80,9 +81,14 @@ extern "C" {
 
 				Process::sleepBlockCount--;
 			}
-		}
 
-		currentProcessControlBlock = currentProcessControlBlock->next;
+			currentSleepBlock = currentSleepBlock->next;
+		}*/
+
+		if (currentProcessControlBlock->readyNext)
+			currentProcessControlBlock = currentProcessControlBlock->readyNext;
+		else
+			currentProcessControlBlock = Process::readyQueue;
 
 		msr::write(IA32_X2APIC_EOI_MSR, 0);
 	}
