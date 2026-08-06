@@ -84,6 +84,8 @@ extern "C" {
 			currentProcessControlBlock = currentProcessControlBlock->readyNext;
 		else
 			currentProcessControlBlock = Process::readyQueue;
+		
+		currentProcessControlBlock->vmm->loadCr3();
 
 		msr::write(IA32_X2APIC_EOI_MSR, 0);
 	}
