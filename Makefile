@@ -18,6 +18,7 @@ all: $(OUTPUT_IMAGE)
 		-net none \
 		-enable-kvm \
 		-cpu host,+x2apic \
+		-m 1G \
 		-s -S \
 		-drive if=pflash,format=raw,readonly=true,file=code.fd \
 		-drive if=pflash,format=raw,file=vars.fd \
