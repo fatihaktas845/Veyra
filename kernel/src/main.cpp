@@ -13,6 +13,7 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 	.response = nullptr
 };
 
+extern VirtualMemoryManager* kernelVmm;
 volatile uint32_t* framebuffer_address = nullptr;
 uint64_t pitch;
 
@@ -23,6 +24,8 @@ extern "C" void kmain() {
 
 	KernelHeap::init();
 
+	kernelVmm = new VirtualMemoryManager;
+	
 	uint32_t* fbb = new uint32_t; // For testing KernelHeap
 	*fbb = 214;
 	delete fbb;
