@@ -8,8 +8,9 @@ namespace Process {
     struct ControlBlock {
         uint64_t rsp    = 0;
 
-        uint64_t pid = 0;
         VirtualMemoryManager* vmm = nullptr;
+        uint64_t cr3 = 0;
+        uint64_t pid = 0;
         uint64_t sleepTime = 0;
 
         ControlBlock* readyPrev = nullptr;
