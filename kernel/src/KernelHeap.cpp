@@ -10,7 +10,7 @@ namespace {
     KernelHeap::BlockHeader* linkedList = nullptr;
 }
 
-VirtualMemoryManager kernelVMM;
+VirtualMemoryManager kernelVmm;
 
 void KernelHeap::init() {
     PhysicalMemoryManager::init();
@@ -31,14 +31,14 @@ bool KernelHeap::expand(const uint64_t pageCount) {
     bool result = true;
 
     for (uint64_t i = 0; i < pageCount; i++) {
-        result = kernelVMM.allocPage(VirtualAddress(KERNEL_HEAP_END), PAGE_FLAG_P | PAGE_FLAG_RW | PAGE_FLAG_XD);
+        result = kernelVmm.allocPage(VirtualAddress(KERNEL_HEAP_END), PAGE_FLAG_P | PAGE_FLAG_RW | PAGE_FLAG_XD);
         
         if (result)
             KERNEL_HEAP_END += 0x1000ULL;
         else {
             while (KERNEL_HEAP_END > oldEnd) {
                 KERNEL_HEAP_END -= 0x1000ULL;
-                kernelVMM.freePage(VirtualAddress(KERNEL_HEAP_END));
+                kernelVmm.freePage(VirtualAddress(KERNEL_HEAP_END));
             }
 
             break;
