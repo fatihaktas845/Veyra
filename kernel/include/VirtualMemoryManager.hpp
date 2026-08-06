@@ -18,7 +18,6 @@ class VirtualMemoryManager {
 	
 	public:
 		VirtualMemoryManager();
-		explicit VirtualMemoryManager(const VirtualAddress pml4);
 
 		void setPml4(const VirtualAddress pml4);
 
@@ -31,5 +30,5 @@ class VirtualMemoryManager {
 		void freePage(const VirtualAddress pageAddr);
 
 		void loadCr3();
-		[[nodiscard]] uint64_t getCr3();
+		[[nodiscard]] static uint64_t getCr3();
 };

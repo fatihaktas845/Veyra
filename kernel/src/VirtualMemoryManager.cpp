@@ -22,24 +22,6 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	this->currentPml4 = this->kernelPml4;
 }
 
-VirtualMemoryManager::VirtualMemoryManager(const VirtualAddress pml4) {
-	if (this->kernelPml4.raw == 0) {
-		PhysicalAddress pa;
-		uint64_t cr3;
-
-		__asm__ volatile(
-			"movq %%cr3, %0"
-			: "=r"(cr3)
-		);
-
-		pa.raw = cr3 & ~0xFFFULL;
-
-		this->kernelPml4 = pa.toVirtualHhdmAddress();
-	}
-
-	this->setPml4(pml4);
-}
-
 void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
 	this->currentPml4 = pml4;
 
