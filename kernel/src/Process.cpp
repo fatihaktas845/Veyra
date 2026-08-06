@@ -62,7 +62,26 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
 void Process::sleep(const uint64_t ms) {
     [[maybe_unused]] InterruptGuard interruptGuard;
 
-    (void)ms;
+    currentProcessControlBlock->sleepTime = timerInterruptCounter + ms;
+
+    if (currentProcessControlBlock->readyPrev)
+        currentProcessControlBlock->readyPrev->readyNext = currentProcessControlBlock->readyNext;
+    else
+        readyQueue = currentProcessControlBlock->readyNext;
+    
+    if (currentProcessControlBlock->readyNext)
+        currentProcessControlBlock->readyNext->readyPrev = currentProcessControlBlock->readyPrev;
+    else
+        lastReadyBlock = currentProcessControlBlock->readyPrev;
+    
+    if (sleepQueue) {
+        lastSleepBlock->sleepNext = currentProcessControlBlock;
+        currentProcessControlBlock->sleepPrev = lastSleepBlock;
+        lastSleepBlock = currentProcessControlBlock;
+    } else
+        sleepQueue = lastSleepBlock = currentProcessControlBlock;
+    
+    scheduler();
 }
 
 void Process::scheduler() {

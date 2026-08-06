@@ -54,36 +54,30 @@ extern "C" {
 		
 		timerInterruptCounter++;
 
-		/*const uint64_t sbc = Process::sleepBlockCount;
-		Process::ControlBlock* currentSleepBlock = Process::sleepQueue;
-		
-		for (uint64_t i = 0; i < sbc; i++) {
-			if (timerInterruptCounter >= currentSleepBlock->sleepTime) {
-				Process::ControlBlock* newBlock = new Process::ControlBlock;
-				kstd::memcpy(newBlock, currentSleepBlock, sizeof(Process::ControlBlock));
+		Process::ControlBlock* currentSleep = Process::sleepQueue;
 
-				if (currentSleepBlock->prev) {
-					currentSleepBlock->prev->next = currentSleepBlock->next;
-					Process::lastSleepBlock = currentSleepBlock->prev;
-				}
-				if (currentSleepBlock->next)
-					currentSleepBlock->next->prev = currentSleepBlock->prev;
+		while (currentSleep) {
+			if (timerInterruptCounter >= currentSleep->sleepTime) {
+				if (currentSleep->sleepPrev)
+					currentSleep->sleepPrev->sleepNext = currentSleep->sleepNext;
+				else
+					Process::sleepQueue = currentSleep->sleepNext;
+				
+				if (currentSleep->sleepNext)
+					currentSleep->sleepNext->sleepPrev = currentSleep->sleepPrev;
+				else
+					Process::lastSleepBlock = currentSleep->sleepPrev;
 				
 				if (Process::readyQueue) {
-					Process::lastReadyBlock->next = newBlock;
-					newBlock->prev = Process::lastReadyBlock;
+					Process::lastReadyBlock->readyNext = currentSleep;
+					currentSleep->readyPrev = Process::lastReadyBlock;
+					Process::lastReadyBlock = currentSleep;
 				} else
-					Process::readyQueue = newBlock;
-				
-				Process::readyQueue->prev = newBlock;
-				newBlock->next = Process::readyQueue;
-				Process::lastReadyBlock = newBlock;
-
-				Process::sleepBlockCount--;
+					Process::readyQueue = Process::lastReadyBlock = currentSleep;
 			}
 
-			currentSleepBlock = currentSleepBlock->next;
-		}*/
+			currentSleep = currentProcessControlBlock->sleepNext;
+		}
 
 		if (currentProcessControlBlock->readyNext)
 			currentProcessControlBlock = currentProcessControlBlock->readyNext;

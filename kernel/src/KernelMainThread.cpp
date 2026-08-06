@@ -42,7 +42,7 @@ void processTwo() {
 		}
 	}
 
-	// Process::sleep(500);
+	Process::sleep(5000);
 
 	for (uint64_t y = 200; y < height + 200; y++) {
 		for (uint64_t x = 200; x < width + 200; x++) {
