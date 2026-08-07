@@ -13,7 +13,7 @@
 
 class VirtualMemoryManager {
 	private:
-		VirtualAddress currentPml4 = VirtualAddress(0);
+		VirtualAddress currentPml4;
 	
 	public:
 		VirtualMemoryManager();

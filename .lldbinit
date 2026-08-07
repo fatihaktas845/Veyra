@@ -1,0 +1,7 @@
+target create "part_esp/kernel.elf"
+gdb-remote 1234
+
+breakpoint set --hardware --name generalProtection()
+breakpoint set --hardware --name pageFault()
+breakpoint set --hardware --name "VirtualMemoryManager::VirtualMemoryManager()"
+breakpoint set --hardware --name "PhysicalMemoryManager::init()"

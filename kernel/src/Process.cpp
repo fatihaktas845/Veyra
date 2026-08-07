@@ -3,10 +3,10 @@
 #include "InterruptGuard.hpp"
 #include "Msr.hpp"
 #include "Kstring.hpp"
+#include "KernelHeap.hpp"
 
 Process::ControlBlock* currentProcessControlBlock;
 
-extern VirtualMemoryManager kernelVmm;
 extern uint64_t kernel_stack_top[];
 extern uint64_t timerInterruptCounter;
 
@@ -17,7 +17,7 @@ void Process::init() {
         return;
     
     ControlBlock* kernelProcess = new ControlBlock;
-    kernelProcess->vmm = &kernelVmm;
+    kernelProcess->vmm = KernelHeap::kernelVmm;
     kernelProcess->cr3 = VirtualMemoryManager::getCr3();
     kernelProcess->rsp = reinterpret_cast<uint64_t>(kernel_stack_top);
     kernelProcess->pid = lastPid++;

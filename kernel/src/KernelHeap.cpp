@@ -11,8 +11,6 @@ namespace {
     KernelHeap::BlockHeader* linkedList = nullptr;
 }
 
-VirtualMemoryManager kernelVmm;
-
 void KernelHeap::init(VirtualMemoryManager* vmm) {
     kernelVmm = vmm;
 
