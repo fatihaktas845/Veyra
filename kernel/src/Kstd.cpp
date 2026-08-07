@@ -19,7 +19,7 @@ void* kstd::memcpy(void* dest, const void* src, uint64_t size) {
 	return dest;
 }
 
-uint64_t kstd::strToUint64(const char* str, uint64_t base) {
+uint64_t kstd::strToUint64(const char* str, int base) {
 	uint64_t sum = 0;
 	const char* s = str;
 
