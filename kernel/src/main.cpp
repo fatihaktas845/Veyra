@@ -18,16 +18,19 @@ static volatile struct limine_framebuffer_request framebuffer_request = {
 volatile uint32_t* framebuffer_address = nullptr;
 uint64_t pitch;
 
+VirtualMemoryManager* globalKernelVmm = nullptr;
+
 void kernelMainThread();
 
 extern "C" void kmain() {
 	call_global_constructors();
-	
+
 	PhysicalMemoryManager::init();
 
-	VirtualMemoryManager kernelVmm;
+	PhysicalAddress pa(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
+	globalKernelVmm = new (pa.toVirtualHhdmAddress().asPtr<void>()) VirtualMemoryManager();
 
-	KernelHeap::init(&kernelVmm);
+	KernelHeap::init(globalKernelVmm);
 
 	uint32_t* fbb = new uint32_t; // For testing KernelHeap
 	*fbb = 214;

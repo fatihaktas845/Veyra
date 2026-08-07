@@ -9,8 +9,8 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	this->currentPml4 = p.toVirtualHhdmAddress();
 
 	PhysicalAddress pa(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
-	(void)pa;
-	// this->setPml4(pa.toVirtualHhdmAddress());
+	kstd::memset(pa.toVirtualHhdmAddress().asPtr(), 0, 4096);
+	this->setPml4(pa.toVirtualHhdmAddress());
 }
 
 void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
@@ -25,6 +25,8 @@ void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
 
 	for (uint64_t i = 256; i < 512; i++)
 		currentPml4Base[i] = kernelPml4Base[i];
+	
+	this->loadCr3();
 }
 
 VirtualAddress VirtualMemoryManager::getPml4() const {
@@ -181,7 +183,7 @@ PhysicalAddress VirtualMemoryManager::toPhysicalAddress(const VirtualAddress add
 bool VirtualMemoryManager::allocPage(const VirtualAddress pageAddr, const uint64_t flags) {
 	const uint64_t paRaw = reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage());
 
-	if (paRaw) {
+	if (paRaw != 0) {
 		this->mapPage(PhysicalAddress(paRaw), pageAddr, flags);
 		return true;
 	} else 
@@ -198,7 +200,7 @@ void VirtualMemoryManager::loadCr3() {
 	const uint64_t pml4Physical = this->currentPml4.toPhysicalHhdmAddress().raw;
 
 	uint64_t cr3 = this->getCr3();
-	cr3 |= pml4Physical;
+	cr3 = pml4Physical | (cr3 & 0xFFF0000000000FFFULL);
 
 	__asm__ volatile(
 		"movq %0, %%cr3"

@@ -7,6 +7,14 @@ void call_global_constructors();
 void* operator new(uint64_t size);
 void* operator new[](uint64_t size);
 
+inline void* operator new(uint64_t, void* ptr) noexcept {
+    return ptr;
+}
+
+inline void* operator new[](uint64_t, void* ptr) noexcept {
+    return ptr;
+}
+
 void operator delete(void* ptr) noexcept;
 void operator delete[](void* ptr) noexcept;
 

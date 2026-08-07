@@ -11,7 +11,7 @@ namespace KernelHeap {
         BlockHeader* next = nullptr;
     };
     
-    inline VirtualMemoryManager* kernelVmm = nullptr;
+    extern VirtualMemoryManager* kernelVmm;
 
     void init(VirtualMemoryManager* vmm);
     bool expand(const uint64_t pageCount);

@@ -11,6 +11,10 @@ namespace {
     KernelHeap::BlockHeader* linkedList = nullptr;
 }
 
+namespace KernelHeap {
+    VirtualMemoryManager* kernelVmm = nullptr;
+}
+
 void KernelHeap::init(VirtualMemoryManager* vmm) {
     kernelVmm = vmm;
 
@@ -23,7 +27,7 @@ void KernelHeap::init(VirtualMemoryManager* vmm) {
 }
 
 bool KernelHeap::expand(const uint64_t pageCount) {
-    if (!pageCount)
+    if (pageCount == 0)
         return false;
     
     const uint64_t oldEnd = KERNEL_HEAP_END;
