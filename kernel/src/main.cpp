@@ -22,6 +22,7 @@ void kernelMainThread();
 
 extern "C" void kmain() {
 	call_global_constructors();
+	
 	PhysicalMemoryManager::init();
 
 	VirtualMemoryManager kernelVmm;
