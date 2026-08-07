@@ -2,7 +2,7 @@
 #include "Msr.hpp"
 #include "Process.hpp"
 #include "Io.hpp"
-#include "Kstring.hpp"
+#include "Kstd.hpp"
 #include "VirtualMemoryManager.hpp"
 
 static idt::entry idt_entries[256] = {};

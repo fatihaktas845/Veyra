@@ -1,6 +1,6 @@
 #include "VirtualMemoryManager.hpp"
 #include "PhysicalMemoryManager.hpp"
-#include "Kstring.hpp"
+#include "Kstd.hpp"
 
 VirtualMemoryManager::VirtualMemoryManager() {
 	const uint64_t cr3 = getCr3();

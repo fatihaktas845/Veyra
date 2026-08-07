@@ -2,7 +2,7 @@
 #include "VirtualMemoryManager.hpp"
 #include "InterruptGuard.hpp"
 #include "Msr.hpp"
-#include "Kstring.hpp"
+#include "Kstd.hpp"
 #include "KernelHeap.hpp"
 
 Process::ControlBlock* currentProcessControlBlock;
