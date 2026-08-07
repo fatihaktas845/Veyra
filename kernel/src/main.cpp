@@ -3,6 +3,8 @@
 #include "Apic.hpp"
 #include "InterruptGuard.hpp"
 #include "Process.hpp"
+#include "PhysicalMemoryManager.hpp"
+#include "VirtualMemoryManager.hpp"
 
 #include <limine.h>
 
@@ -20,8 +22,11 @@ void kernelMainThread();
 
 extern "C" void kmain() {
 	call_global_constructors();
+	PhysicalMemoryManager::init();
 
-	KernelHeap::init();
+	VirtualMemoryManager kernelVmm;
+
+	KernelHeap::init(&kernelVmm);
 
 	uint32_t* fbb = new uint32_t; // For testing KernelHeap
 	*fbb = 214;

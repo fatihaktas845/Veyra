@@ -1,6 +1,7 @@
 #include "KernelHeap.hpp"
 #include "PhysicalMemoryManager.hpp"
 #include "InterruptGuard.hpp"
+#include "VirtualMemoryManager.hpp"
 
 namespace {
     uint64_t KERNEL_HEAP_START = 0xFFFF'9600'0000'0000ULL;
@@ -12,8 +13,8 @@ namespace {
 
 VirtualMemoryManager kernelVmm;
 
-void KernelHeap::init() {
-    PhysicalMemoryManager::init();
+void KernelHeap::init(VirtualMemoryManager* vmm) {
+    kernelVmm = vmm;
 
     expand(4);
 
@@ -31,14 +32,14 @@ bool KernelHeap::expand(const uint64_t pageCount) {
     bool result = true;
 
     for (uint64_t i = 0; i < pageCount; i++) {
-        result = kernelVmm.allocPage(VirtualAddress(KERNEL_HEAP_END), PAGE_FLAG_P | PAGE_FLAG_RW | PAGE_FLAG_XD);
+        result = kernelVmm->allocPage(VirtualAddress(KERNEL_HEAP_END), PAGE_FLAG_P | PAGE_FLAG_RW | PAGE_FLAG_XD);
         
         if (result)
             KERNEL_HEAP_END += 0x1000ULL;
         else {
             while (KERNEL_HEAP_END > oldEnd) {
                 KERNEL_HEAP_END -= 0x1000ULL;
-                kernelVmm.freePage(VirtualAddress(KERNEL_HEAP_END));
+                kernelVmm->freePage(VirtualAddress(KERNEL_HEAP_END));
             }
 
             break;

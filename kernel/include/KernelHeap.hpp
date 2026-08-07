@@ -1,6 +1,8 @@
 #pragma once
 
-#include "VirtualMemoryManager.hpp"
+#include "Address.hpp"
+
+class VirtualMemoryManager;
 
 namespace KernelHeap {
     struct BlockHeader {
@@ -9,7 +11,9 @@ namespace KernelHeap {
         BlockHeader* next = nullptr;
     };
     
-    void init();
+    inline VirtualMemoryManager* kernelVmm = nullptr;
+
+    void init(VirtualMemoryManager* vmm);
     bool expand(const uint64_t pageCount);
 
     VirtualAddress alloc(const uint64_t size);

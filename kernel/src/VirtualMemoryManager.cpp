@@ -9,7 +9,7 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	this->currentPml4 = p.toVirtualHhdmAddress();
 
 	/* PhysicalAddress pa(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
-	this->setPml4(pa.toVirtualHhdmAddress());*/
+	this->setPml4(pa.toVirtualHhdmAddress()); */
 }
 
 void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
