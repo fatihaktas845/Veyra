@@ -3,6 +3,7 @@ LD := ld.lld -T kernel/kernel.ld -nostdlib -no-pie
 
 OUTPUT_BINARY := part_esp/kernel.elf
 OUTPUT_IMAGE := Veyra-x86_64-UEFI.img
+RAMDISK_FILE := ramdisk.tar
 
 CPP_SOURCES := $(wildcard kernel/src/*.cpp)
 ASM_SOURCES := $(wildcard kernel/src/*.asm)
@@ -35,6 +36,9 @@ $(OUTPUT_IMAGE): $(OUTPUT_BINARY)
 	@parted -s $@ set 1 boot on
 	dd if=esp.img of=$@ bs=1M count=40 oseek=2 conv=notrunc
 	-rm -rf esp.img
+	cd ramdiskRoot/; \
+	tar --format=ustar -cvf $(RAMDISK_FILE) *; \
+	cd ..
 
 $(OUTPUT_BINARY): $(OBJS)
 	$(LD) $^ -o $@
@@ -51,4 +55,5 @@ clean:
 	rm -rf \
 		$(OUTPUT_IMAGE) \
 		$(OUTPUT_BINARY) \
-		kernel/obj
+		kernel/obj \
+		$(RAMDISK_FILE)
