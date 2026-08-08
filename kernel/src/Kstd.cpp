@@ -19,6 +19,17 @@ void* kstd::memcpy(void* dest, const void* src, uint64_t size) {
 	return dest;
 }
 
+int kstd::memcmp(const void* ptr1, const void* ptr2, uint64_t size) {
+	const uint8_t* p1 = reinterpret_cast<const uint8_t*>(ptr1);
+	const uint8_t* p2 = reinterpret_cast<const uint8_t*>(ptr2);
+
+	for (uint64_t i = 0; i < size; i++)
+		if (p1[i] != p2[i])
+			return p1[i] < p2[i] ? -1 : 1;
+
+	return 0;
+}
+
 uint64_t kstd::strToUint64(const char* str, int base) {
 	uint64_t sum = 0;
 	const char* s = str;
