@@ -64,3 +64,9 @@ uint64_t kstd::strToUint64(const char* str, int base) {
 
 	return sum;
 }
+
+extern "C" {
+	void* memset(void* dest, int c, uint64_t count) {
+		return kstd::memset(dest, static_cast<uint8_t>(c), count);
+	}
+}
