@@ -23,7 +23,7 @@ uint64_t kstd::strToUint64(const char* str, int base) {
 	uint64_t sum = 0;
 	const char* s = str;
 
-	while (*s != '\0') {
+	while (*s != '\0' || *s != ' ') {
 		int digit = -1;
 		if (*s >= '0' && *s <= '9')
 			digit = *s - '0';
