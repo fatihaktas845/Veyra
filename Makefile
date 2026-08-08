@@ -37,7 +37,7 @@ $(OUTPUT_IMAGE): $(OUTPUT_BINARY)
 	dd if=esp.img of=$@ bs=1M count=40 oseek=2 conv=notrunc
 	-rm -rf esp.img
 	cd ramdiskRoot/; \
-	tar --format=ustar -cvf $(RAMDISK_FILE) *; \
+	tar --format=ustar -cvf ../$(RAMDISK_FILE) *; \
 	cd ..
 
 $(OUTPUT_BINARY): $(OBJS)
