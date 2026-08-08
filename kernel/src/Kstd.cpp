@@ -30,6 +30,18 @@ int kstd::memcmp(const void* ptr1, const void* ptr2, uint64_t size) {
 	return 0;
 }
 
+int kstd::strcmp(const char* str1, const char* str2) {
+	const uint8_t* s1 = reinterpret_cast<const uint8_t*>(str1);
+	const uint8_t* s2 = reinterpret_cast<const uint8_t*>(str2);
+
+	while (*s1 && (*s1 == *s2)) {
+		s1++;
+		s2++;
+	}
+
+	return *s1 - *s2;
+}
+
 uint64_t kstd::strToUint64(const char* str, int base) {
 	uint64_t sum = 0;
 	const char* s = str;
