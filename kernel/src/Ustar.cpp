@@ -10,7 +10,7 @@ const void* Ustar::readFile(void* tarFile, const char* fileName) {
     
     const uint8_t* currentAddress = reinterpret_cast<const uint8_t*>(tarFile);
 
-    FileHeader fileEnd[2] = {0};
+    FileHeader fileEnd[2] = {};
 
     while (Kstd::memcmp(currentAddress, &fileEnd, sizeof(fileEnd)) != 0) {
         const FileHeader* header = reinterpret_cast<const FileHeader*>(currentAddress);
