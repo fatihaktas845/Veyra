@@ -5,6 +5,9 @@
 #define ALIGN_UP(value) (((value) + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1))
 
 const void* Ustar::readFile(void* tarFile, const char* fileName) {
+    if (fileName[0] == '\0')
+        return nullptr;
+    
     const uint8_t* currentAddress = reinterpret_cast<const uint8_t*>(tarFile);
 
     FileHeader fileEnd[2] = {};
