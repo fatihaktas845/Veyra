@@ -1,7 +1,7 @@
 #include "Idt.hpp"
 #include "Msr.hpp"
 #include "Process.hpp"
-#include "Io.hpp"
+#include "Serial.hpp"
 #include "Kstd.hpp"
 #include "VirtualMemoryManager.hpp"
 
@@ -10,8 +10,6 @@ Idt::descriptor idtr;
 uint64_t timerInterruptCounter = 0;
 
 extern Process::ControlBlock* currentProcessControlBlock;
-
-const uint16_t COM1_PORT = 0x3F8;
 
 extern "C" {
 	void timerInterruptAsm();
@@ -26,7 +24,7 @@ extern "C" {
 	void generalProtection() {
 		__asm__ volatile("movq $14, %%rax" : : : "rax");
 
-		Io::outb(COM1_PORT, 'g');
+		Serial::write("\nGeneral Protection!!!\n");
 
 		while (1)
 			__asm__ volatile("hlt");
@@ -35,7 +33,7 @@ extern "C" {
 	void pageFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		Io::outb(COM1_PORT, 'p');
+		Serial::write("\nPage Fault!!!\n");
 
 		while (1)
 			__asm__ volatile("hlt");
@@ -44,15 +42,13 @@ extern "C" {
 	void doubleFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		Io::outb(COM1_PORT, 'd');
+		Serial::write("\nDouble Fault!!!\n");
 
 		while (1)
 			__asm__ volatile("hlt");
 	}
 
 	void timerInterrupt() {
-		Io::outb(COM1_PORT, 't');
-		
 		timerInterruptCounter++;
 
 		Process::ControlBlock* currentSleep = Process::sleepQueue;
