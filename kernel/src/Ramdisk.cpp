@@ -15,17 +15,15 @@ static volatile struct limine_module_request module_request = {
 };
 
 const uint8_t* Ramdisk::readFile(const char* fileName) {
-    (void)fileName;
+    void* ramdiskAddress = module_request.response->modules[0]->address;
+    UstarParser parser(reinterpret_cast<const uint8_t*>(ramdiskAddress));
 
-    return nullptr;
-
-    // Not Started Yet!!!
+    return parser.readFile(fileName);
 }
 
 uint64_t Ramdisk::getFileSize(const char* fileName) {
-    (void)fileName;
+    void* ramdiskAddress = module_request.response->modules[0]->address;
+    UstarParser parser(reinterpret_cast<const uint8_t*>(ramdiskAddress));
 
-    return 0;
-
-    // Not Started Yet!!!
+    return parser.getFileSize(fileName);
 }
