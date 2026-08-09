@@ -1,4 +1,4 @@
-#include "Ustar.hpp"
+#include "UstarParser.hpp"
 #include "Kstd.hpp"
 
 #define BLOCK_SIZE 512
@@ -28,4 +28,8 @@ const void* Ustar::readFile(void* tarFile, const char* fileName) {
     }
 
     return nullptr;
+}
+
+uint64_t Ustar::getFileSize(const char* fileName) {
+    
 }

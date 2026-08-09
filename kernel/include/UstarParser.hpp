@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace Ustar {
     struct FileHeader {
         char fileName[100];
@@ -22,4 +24,5 @@ namespace Ustar {
     } __attribute__((packed));
 
     const void* readFile(void* tarFile, const char* fileName);
+    uint64_t getFileSize(const char* fileName);
 }
