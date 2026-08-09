@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Address.hpp"
-
 namespace Ustar {
     struct FileHeader {
         char fileName[100];
@@ -23,5 +21,5 @@ namespace Ustar {
         char padding[12];
     } __attribute__((packed));
 
-    VirtualAddress readFile(VirtualAddress tarFile, const char* fileName);
+    const void* readFile(void* tarFile, const char* fileName);
 }

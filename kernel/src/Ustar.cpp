@@ -4,8 +4,8 @@
 #define BLOCK_SIZE 512
 #define ALIGN_UP(value) (((value) + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1))
 
-VirtualAddress Ustar::readFile(VirtualAddress tarFile, const char* fileName) {
-    const uint8_t* currentAddress = tarFile.asPtr<const uint8_t>();
+const void* Ustar::readFile(void* tarFile, const char* fileName) {
+    const uint8_t* currentAddress = reinterpret_cast<const uint8_t*>(tarFile);
 
     FileHeader fileEnd[2] = {};
 
@@ -21,8 +21,8 @@ VirtualAddress Ustar::readFile(VirtualAddress tarFile, const char* fileName) {
             continue;
         }
 
-        return VirtualAddress(reinterpret_cast<uint64_t>(currentAddress));
+        return reinterpret_cast<const void*>(currentAddress);
     }
 
-    return VirtualAddress(0);
+    return 0;
 }

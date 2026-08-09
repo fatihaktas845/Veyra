@@ -3,5 +3,5 @@
 #include "Address.hpp"
 
 namespace Ramdisk {
-    void load();
+    VirtualAddress getInfo(uint64_t& fileSize);
 }
