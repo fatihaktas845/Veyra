@@ -92,5 +92,5 @@ void Process::sleep(const uint64_t ms) {
 void Process::scheduler() {
     [[maybe_unused]] InterruptGuard interruptGuard;
 
-    msr::write(IA32_X2APIC_SELF_IPI_MSR, 0x20);
+    Msr::write(IA32_X2APIC_SELF_IPI_MSR, 0x20);
 }

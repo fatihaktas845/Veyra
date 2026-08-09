@@ -1,8 +1,8 @@
 #include "Gdt.hpp"
 
 uint64_t gdtArray[7] = {};
-gdt::GDTR gdtr;
-gdt::TSS globalTss;
+Gdt::GDTR gdtr;
+Gdt::TSS globalTss;
 
 extern "C" uint64_t kernel_stack_top[];
 extern "C" uint64_t double_fault_stack_top[];
@@ -12,19 +12,19 @@ extern "C" void initGdt() {
     globalTss.ist[0] = reinterpret_cast<uint64_t>(double_fault_stack_top);
 
     uint64_t base = reinterpret_cast<uint64_t>(&globalTss);
-    uint64_t limit = sizeof(gdt::TSS) - 1;
+    uint64_t limit = sizeof(Gdt::TSS) - 1;
 
-    gdt::setEntry(1, 0x9B, 0xA); // Kernel-Code Segment - 0x08
-    gdt::setEntry(2, 0x93, 0xA); // Kernel-Data Segment - 0x10
-    gdt::setEntry(3, 0xF3, 0xA); // User-Data Segment - 0x1B
-    gdt::setEntry(4, 0xFB, 0xA); // User-Code Segment - 0x23
-    gdt::setSystemEntry(5, base, limit, 0x89, 0xA); // Kernel-Task State Segment - 0x28
+    Gdt::setEntry(1, 0x9B, 0xA); // Kernel-Code Segment - 0x08
+    Gdt::setEntry(2, 0x93, 0xA); // Kernel-Data Segment - 0x10
+    Gdt::setEntry(3, 0xF3, 0xA); // User-Data Segment - 0x1B
+    Gdt::setEntry(4, 0xFB, 0xA); // User-Code Segment - 0x23
+    Gdt::setSystemEntry(5, base, limit, 0x89, 0xA); // Kernel-Task State Segment - 0x28
 
     gdtr.size = sizeof(gdtArray) - 1;
     gdtr.offset = reinterpret_cast<uint64_t>(&gdtArray);
 }
 
-void gdt::setEntry(uint64_t index, uint8_t access, uint8_t flags) {
+void Gdt::setEntry(uint64_t index, uint8_t access, uint8_t flags) {
     SegmentDescriptor sd;
 
     sd.limitLow = 0xFFFF;
@@ -37,7 +37,7 @@ void gdt::setEntry(uint64_t index, uint8_t access, uint8_t flags) {
     gdtArray[index] = *reinterpret_cast<uint64_t*>(&sd);
 } 
 
-void gdt::setSystemEntry(uint64_t index, uint64_t base, uint32_t limit, uint8_t access, uint8_t flags) {
+void Gdt::setSystemEntry(uint64_t index, uint64_t base, uint32_t limit, uint8_t access, uint8_t flags) {
     SystemSegmentDescriptor ssd;
 
     ssd.limitLow = limit & 0xFFFF;

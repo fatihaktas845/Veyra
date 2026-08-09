@@ -13,7 +13,7 @@
 #define IA32_X2APIC_CURR_COUNT_MSR 0x839
 #define IA32_X2APIC_DIV_CONF_MSR   0x83E
 
-namespace msr {
+namespace Msr {
     [[nodiscard]] inline uint64_t read(const uint32_t msr) {
         uint32_t low, high;
 

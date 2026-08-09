@@ -53,7 +53,7 @@ extern "C" void kmain() {
 	}
 
 	Process::init();
-	apic::init();
+	Apic::init();
 	InterruptGuard::setInterrupts();
 	
 	kernelMainThread();

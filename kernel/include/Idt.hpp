@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace idt {
+namespace Idt {
 	struct entry {
 		uint16_t offset_1;
 		uint16_t segment_selector;

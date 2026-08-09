@@ -5,8 +5,8 @@
 #include "Kstd.hpp"
 #include "VirtualMemoryManager.hpp"
 
-static idt::entry idt_entries[256] = {};
-idt::descriptor idtr;
+static Idt::entry idt_entries[256] = {};
+Idt::descriptor idtr;
 uint64_t timerInterruptCounter = 0;
 
 extern Process::ControlBlock* currentProcessControlBlock;
@@ -87,11 +87,11 @@ extern "C" {
 		
 		currentProcessControlBlock->vmm->loadCr3();
 
-		msr::write(IA32_X2APIC_EOI_MSR, 0);
+		Msr::write(IA32_X2APIC_EOI_MSR, 0);
 	}
 }
 
-void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute) {
+void Idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_attribute) {
 	idt_entries[index].offset_1 = (uint16_t)(offset & 0xFFFF);
 	idt_entries[index].segment_selector = (uint16_t)0x08;
 	idt_entries[index].ist = ist;
@@ -102,12 +102,12 @@ void idt::setIdtEntry(uint8_t index, uint64_t offset, uint8_t ist, uint8_t type_
 }
 
 extern "C" void initIdt() {
-	idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideError), 0, 0x8F);
-	idt::setIdtEntry(13, reinterpret_cast<uint64_t>(generalProtection), 0, 0x8F);
-	idt::setIdtEntry(14, reinterpret_cast<uint64_t>(pageFault), 0, 0x8F);
-	idt::setIdtEntry(8, reinterpret_cast<uint64_t>(doubleFault), 1, 0x8F);
+	Idt::setIdtEntry(0, reinterpret_cast<uint64_t>(divideError), 0, 0x8F);
+	Idt::setIdtEntry(13, reinterpret_cast<uint64_t>(generalProtection), 0, 0x8F);
+	Idt::setIdtEntry(14, reinterpret_cast<uint64_t>(pageFault), 0, 0x8F);
+	Idt::setIdtEntry(8, reinterpret_cast<uint64_t>(doubleFault), 1, 0x8F);
 
-	idt::setIdtEntry(0x20, reinterpret_cast<uint64_t>(timerInterruptAsm), 0, 0x8E);
+	Idt::setIdtEntry(0x20, reinterpret_cast<uint64_t>(timerInterruptAsm), 0, 0x8E);
 
 	idtr.size = sizeof(idt_entries) - 1;
 	idtr.offset = reinterpret_cast<uint64_t>(idt_entries);

@@ -14,15 +14,13 @@ extern kmain
 section .bss
 	resb 4096
 	double_fault_stack_top:
-	resb 4096
-	temporary_kernel_stack_top:
 
 section .text
 	_start:
 		cld
 		cli
 
-		mov rsp, temporary_kernel_stack_top
+		mov rsp, kernel_stack_top
 
 		xor rbp, rbp
 

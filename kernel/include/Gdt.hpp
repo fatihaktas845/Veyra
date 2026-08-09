@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace gdt {
+namespace Gdt {
     struct GDTR {
         uint16_t size;
         uint64_t offset;

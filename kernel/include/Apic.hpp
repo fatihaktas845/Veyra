@@ -1,5 +1,5 @@
 #pragma once
 
-namespace apic {
+namespace Apic {
     void init();
 }
