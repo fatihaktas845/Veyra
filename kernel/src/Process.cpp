@@ -5,6 +5,14 @@
 #include "Kstd.hpp"
 #include "KernelHeap.hpp"
 
+namespace Process {
+    ControlBlock* readyQueue = nullptr;
+    ControlBlock* sleepQueue = nullptr;
+    ControlBlock* lastReadyBlock = nullptr;
+    ControlBlock* lastSleepBlock = nullptr;
+    uint64_t lastPid = 0;
+}
+
 Process::ControlBlock* currentProcessControlBlock;
 
 extern uint64_t kernel_stack_top[];

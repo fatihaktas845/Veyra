@@ -19,12 +19,12 @@ namespace Process {
         ControlBlock* sleepNext = nullptr;
     } __attribute__((packed));
 
-    inline ControlBlock* readyQueue = nullptr;
-    inline ControlBlock* sleepQueue = nullptr;
+    extern ControlBlock* readyQueue;
+    extern ControlBlock* sleepQueue;
 
-    inline ControlBlock* lastReadyBlock = nullptr;
-    inline ControlBlock* lastSleepBlock = nullptr;
-    inline uint64_t lastPid = 0;
+    extern ControlBlock* lastReadyBlock;
+    extern ControlBlock* lastSleepBlock;
+    extern uint64_t lastPid;
 
     void init();
     void create(const uint64_t rspTop, const uint64_t rip, const bool isUser = false);

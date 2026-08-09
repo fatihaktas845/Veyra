@@ -49,9 +49,9 @@ void Apic::init() {
     Msr::write(IA32_X2APIC_LVT_TIMER_MSR, (1ULL << 17) | 0x20ULL);
 
     uint32_t tickCountFor1ms;
-    if (tsc_frequency_request.response)
+    /* if (tsc_frequency_request.response)
         tickCountFor1ms = tsc_frequency_request.response->frequency / 16000;
-    else
+    else */
         tickCountFor1ms = calculateApicTimerInitCount();
     
     Msr::write(IA32_X2APIC_INIT_COUNT_MSR, static_cast<uint64_t>(tickCountFor1ms));
