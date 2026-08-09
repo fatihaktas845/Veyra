@@ -2,6 +2,15 @@
 #include "Msr.hpp"
 #include "Io.hpp"
 
+#include <limine.h>
+
+__attribute__((used, aligned(8)))
+static volatile struct limine_tsc_frequency_request tsc_frequency_request = {
+    .id = LIMINE_TSC_FREQUENCY_REQUEST_ID,
+    .revision = 0,
+    .response = nullptr
+};
+
 namespace {
     [[nodiscard]] inline uint32_t calculateApicTimerInitCount() {
         const uint8_t gate = io::inb(0x61);
@@ -39,6 +48,11 @@ void apic::init() {
     msr::write(IA32_X2APIC_DIV_CONF_MSR, 0x3ULL);
     msr::write(IA32_X2APIC_LVT_TIMER_MSR, (1ULL << 17) | 0x20ULL);
 
-    const uint32_t tickCountFor1ms = calculateApicTimerInitCount();
+    uint32_t tickCountFor1ms;
+    if (tsc_frequency_request.response)
+        tickCountFor1ms = tsc_frequency_request.response->frequency / 16000;
+    else
+        tickCountFor1ms = calculateApicTimerInitCount();
+    
     msr::write(IA32_X2APIC_INIT_COUNT_MSR, static_cast<uint64_t>(tickCountFor1ms));
 }
