@@ -5,8 +5,8 @@
 extern volatile uint32_t* framebuffer_address;
 extern uint64_t pitch;
 
-uint8_t processTwoStack[4096] = {};
-uint8_t processThreeStack[4096] = {};
+static uint8_t processTwoStack[4096];
+static uint8_t processThreeStack[4096];
 
 void processTwo();
 void processThree();
