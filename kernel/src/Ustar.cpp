@@ -9,13 +9,13 @@ VirtualAddress Ustar::readFile(VirtualAddress tarFile, const char* fileName) {
 
     FileHeader fileEnd[2] = {};
 
-    while (kstd::memcmp(currentAddress, &fileEnd, sizeof(fileEnd)) != 0) {
+    while (Kstd::memcmp(currentAddress, &fileEnd, sizeof(fileEnd)) != 0) {
         const FileHeader* header = reinterpret_cast<const FileHeader*>(currentAddress);
         currentAddress += BLOCK_SIZE;
 
-        uint64_t fileSize = kstd::strToUint64(header->fileSize, 8);
+        uint64_t fileSize = Kstd::strToUint64(header->fileSize, 8);
 
-        if (kstd::strcmp(header->fileName, fileName) != 0) {
+        if (Kstd::strcmp(header->fileName, fileName) != 0) {
             fileSize = ALIGN_UP(fileSize);
             currentAddress += fileSize;
             continue;

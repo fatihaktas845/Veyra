@@ -22,7 +22,7 @@ static uint64_t highest = 0;
 static uint64_t page_count = 0;
 
 void PhysicalMemoryManager::init() {
-	hhdm::init();
+	Hhdm::init();
 
 	const limine_memmap_response* response = memmap_request.response;
 
@@ -44,7 +44,7 @@ void PhysicalMemoryManager::init() {
 			
 			if (aligned_end > aligned_base && (aligned_end - aligned_base) >= bitmap_size) {
 				bitmap_physical = aligned_base;
-				bitmap_base = (uint64_t*)(aligned_base + hhdm::offset);
+				bitmap_base = (uint64_t*)(aligned_base + Hhdm::offset);
 				break;
 			}
 		}

@@ -13,21 +13,21 @@ static volatile struct limine_tsc_frequency_request tsc_frequency_request = {
 
 namespace {
     [[nodiscard]] inline uint32_t calculateApicTimerInitCount() {
-        const uint8_t gate = io::inb(0x61);
-        io::outb(0x61, (gate & 0xDC) | 0x01);
+        const uint8_t gate = Io::inb(0x61);
+        Io::outb(0x61, (gate & 0xDC) | 0x01);
 
-        io::outb(0x43, 0xB0);
+        Io::outb(0x43, 0xB0);
 
         const uint16_t pitTicks = 1193;
-        io::outb(0x42, static_cast<uint8_t>(pitTicks & 0xFF));
-        io::outb(0x42, static_cast<uint8_t>((pitTicks >> 8) & 0xFF));
+        Io::outb(0x42, static_cast<uint8_t>(pitTicks & 0xFF));
+        Io::outb(0x42, static_cast<uint8_t>((pitTicks >> 8) & 0xFF));
         msr::write(IA32_X2APIC_INIT_COUNT_MSR, 0xFFFFFFFFULL);
 
-        while ((io::inb(0x61) & 0x20) == 0);
+        while ((Io::inb(0x61) & 0x20) == 0);
 
         const uint32_t currentApicTimerCount = static_cast<uint32_t>(msr::read(IA32_X2APIC_CURR_COUNT_MSR));
 
-        io::outb(0x61, gate);
+        Io::outb(0x61, gate);
 
         return 0xFFFFFFFF - currentApicTimerCount;
     }

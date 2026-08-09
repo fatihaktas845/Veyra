@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace io {
+namespace Io {
     inline void outb(const uint16_t port, const uint8_t value) {
         __asm__ volatile(
             "outb %0, %1"

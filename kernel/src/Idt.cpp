@@ -26,7 +26,7 @@ extern "C" {
 	void generalProtection() {
 		__asm__ volatile("movq $14, %%rax" : : : "rax");
 
-		io::outb(COM1_PORT, 'g');
+		Io::outb(COM1_PORT, 'g');
 
 		while (1)
 			__asm__ volatile("hlt");
@@ -35,7 +35,7 @@ extern "C" {
 	void pageFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		io::outb(COM1_PORT, 'p');
+		Io::outb(COM1_PORT, 'p');
 
 		while (1)
 			__asm__ volatile("hlt");
@@ -44,14 +44,14 @@ extern "C" {
 	void doubleFault() {
 		__asm__ volatile("movq $15, %%rax" : : : "rax");
 
-		io::outb(COM1_PORT, 'd');
+		Io::outb(COM1_PORT, 'd');
 
 		while (1)
 			__asm__ volatile("hlt");
 	}
 
 	void timerInterrupt() {
-		io::outb(COM1_PORT, 't');
+		Io::outb(COM1_PORT, 't');
 		
 		timerInterruptCounter++;
 

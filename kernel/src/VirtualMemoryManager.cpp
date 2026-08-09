@@ -9,7 +9,7 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	this->currentPml4 = p.toVirtualHhdmAddress();
 
 	PhysicalAddress pa(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
-	kstd::memset(pa.toVirtualHhdmAddress().asPtr(), 0, 4096);
+	Kstd::memset(pa.toVirtualHhdmAddress().asPtr(), 0, 4096);
 	this->setPml4(pa.toVirtualHhdmAddress());
 }
 
@@ -55,7 +55,7 @@ void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddres
 	} else {
         PhysicalAddress p(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
 		pdpt = p.toVirtualHhdmAddress().asPtr<uint64_t>();
-		kstd::memset(pdpt, 0, 4096);
+		Kstd::memset(pdpt, 0, 4096);
 		pml4[pml4Index] = p.raw | tableFlags;
 	}
 
@@ -65,7 +65,7 @@ void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddres
 	} else {
         PhysicalAddress p(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
 		pd = p.toVirtualHhdmAddress().asPtr<uint64_t>();
-		kstd::memset(pd, 0, 4096);
+		Kstd::memset(pd, 0, 4096);
 		pdpt[pdptIndex] = p.raw | tableFlags;
 	}
 
@@ -75,7 +75,7 @@ void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddres
 	} else {
         PhysicalAddress p(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
 		pt = p.toVirtualHhdmAddress().asPtr<uint64_t>();
-		kstd::memset(pt, 0, 4096);
+		Kstd::memset(pt, 0, 4096);
 		pd[pdIndex] = p.raw | tableFlags;
 	}
 

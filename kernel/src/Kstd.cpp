@@ -1,6 +1,6 @@
 #include "Kstd.hpp"
 
-void* kstd::memset(void* dest, uint8_t c, uint64_t count) {
+void* Kstd::memset(void* dest, uint8_t c, uint64_t count) {
 	uint8_t* d = reinterpret_cast<uint8_t*>(dest);
 
 	while (count--)
@@ -9,7 +9,7 @@ void* kstd::memset(void* dest, uint8_t c, uint64_t count) {
 	return dest;
 }
 
-void* kstd::memcpy(void* dest, const void* src, uint64_t size) {
+void* Kstd::memcpy(void* dest, const void* src, uint64_t size) {
 	uint8_t* d = reinterpret_cast<uint8_t*>(dest);
 	const uint8_t* s = reinterpret_cast<const uint8_t*>(src);
 
@@ -19,7 +19,7 @@ void* kstd::memcpy(void* dest, const void* src, uint64_t size) {
 	return dest;
 }
 
-int kstd::memcmp(const void* ptr1, const void* ptr2, uint64_t size) {
+int Kstd::memcmp(const void* ptr1, const void* ptr2, uint64_t size) {
 	const uint8_t* p1 = reinterpret_cast<const uint8_t*>(ptr1);
 	const uint8_t* p2 = reinterpret_cast<const uint8_t*>(ptr2);
 
@@ -30,7 +30,7 @@ int kstd::memcmp(const void* ptr1, const void* ptr2, uint64_t size) {
 	return 0;
 }
 
-int kstd::strcmp(const char* str1, const char* str2) {
+int Kstd::strcmp(const char* str1, const char* str2) {
 	const uint8_t* s1 = reinterpret_cast<const uint8_t*>(str1);
 	const uint8_t* s2 = reinterpret_cast<const uint8_t*>(str2);
 
@@ -42,7 +42,7 @@ int kstd::strcmp(const char* str1, const char* str2) {
 	return *s1 - *s2;
 }
 
-uint64_t kstd::strToUint64(const char* str, int base) {
+uint64_t Kstd::strToUint64(const char* str, int base) {
 	uint64_t sum = 0;
 	const char* s = str;
 
@@ -67,6 +67,6 @@ uint64_t kstd::strToUint64(const char* str, int base) {
 
 extern "C" {
 	void* memset(void* dest, int c, uint64_t count) {
-		return kstd::memset(dest, static_cast<uint8_t>(c), count);
+		return Kstd::memset(dest, static_cast<uint8_t>(c), count);
 	}
 }

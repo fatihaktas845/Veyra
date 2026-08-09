@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace hhdm {
+namespace Hhdm {
 	inline uint64_t offset = 0;
 	
 	void init();
