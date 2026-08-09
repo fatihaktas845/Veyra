@@ -1,5 +1,5 @@
 #include "Ramdisk.hpp"
 
-VirtualAddress Ramdisk::getInfo(uint64_t& fileSize) {
+const void* Ramdisk::readFile(const char* fileName, uint64_t* fileSize_out) {
     
 }

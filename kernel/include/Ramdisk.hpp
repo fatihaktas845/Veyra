@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Address.hpp"
+#include <stdint.h>
 
 namespace Ramdisk {
-    VirtualAddress getInfo(uint64_t& fileSize);
+    const void* readFile(const char* fileName, uint64_t* fileSize_out);
 }
