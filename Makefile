@@ -56,4 +56,4 @@ clean:
 		$(OUTPUT_IMAGE) \
 		$(OUTPUT_BINARY) \
 		kernel/obj \
-		part_esp/$(RAMDISK_FILE)
+		$(RAMDISK_FILE)
