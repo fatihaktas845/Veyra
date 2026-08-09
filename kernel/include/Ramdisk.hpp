@@ -3,5 +3,6 @@
 #include <stdint.h>
 
 namespace Ramdisk {
-    const void* readFile(const char* fileName, uint64_t* fileSize_out);
+    const uint8_t* readFile(const char* fileName);
+    uint64_t getFileSize(const char* fileName);
 }

@@ -1,4 +1,5 @@
 #include "Ramdisk.hpp"
+#include "UstarParser.hpp"
 
 #include <limine.h>
 
@@ -7,15 +8,24 @@ static volatile struct limine_module_request module_request = {
     .id = LIMINE_MODULE_REQUEST_ID,
     .revision = 0,
     .response = nullptr,
+
+    // Not Usable for Revision 0
     .internal_module_count = 0,
     .internal_modules = nullptr
 };
 
-const void* Ramdisk::readFile(const char* fileName, uint64_t* fileSize_out) {
+const uint8_t* Ramdisk::readFile(const char* fileName) {
     (void)fileName;
-    (void)fileSize_out;
 
     return nullptr;
 
-    // Not Sterted Yet!!!
+    // Not Started Yet!!!
+}
+
+uint64_t Ramdisk::getFileSize(const char* fileName) {
+    (void)fileName;
+
+    return 0;
+
+    // Not Started Yet!!!
 }

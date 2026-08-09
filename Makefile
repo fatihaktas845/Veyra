@@ -36,6 +36,8 @@ $(OUTPUT_IMAGE): $(OUTPUT_BINARY) $(RAMDISK_FILE)
 	@parted -s $@ set 1 boot on
 	dd if=esp.img of=$@ bs=1M count=40 oseek=2 conv=notrunc
 	-rm -rf esp.img
+
+$(RAMDISK_FILE):
 	cd ramdiskRoot/; \
 	tar --format=ustar -cvf ../$(RAMDISK_FILE) *; \
 	cd ..
