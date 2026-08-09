@@ -24,5 +24,5 @@ const void* Ustar::readFile(void* tarFile, const char* fileName) {
         return reinterpret_cast<const void*>(currentAddress);
     }
 
-    return 0;
+    return nullptr;
 }
