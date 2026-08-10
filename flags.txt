@@ -6,6 +6,12 @@
 -fno-rtti
 -fno-exceptions
 -fno-threadsafe-statics
+-mno-sse
+-mno-sse2
+-mno-mmx
+-mno-avx
+-mno-80387
+-fno-tree-vectorize
 -msoft-float
 -O2
 -mcmodel=kernel
