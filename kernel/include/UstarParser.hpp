@@ -32,6 +32,9 @@ class UstarParser {
         UstarParser(const UstarParser&) = delete;
         UstarParser& operator=(const UstarParser&) = delete;
 
+        UstarParser(UstarParser&&) = delete;
+        UstarParser& operator=(UstarParser&&) = delete;
+
         const uint8_t* readFile(const char* fileName);
         uint64_t getFileSize(const char* fileName);
 };
