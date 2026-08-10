@@ -4,6 +4,11 @@ void* Kstd::memset(void* dest, int c, uint64_t count) {
     uint8_t* d = static_cast<uint8_t*>(dest);
     uint8_t val = static_cast<uint8_t>(c);
 
+    while (count > 0 && (reinterpret_cast<uintptr_t>(d) & 7) != 0) {
+        *d++ = val;
+        count--;
+    }
+
     uint64_t val64 = static_cast<uint64_t>(val);
     val64 |= (val64 << 8);
     val64 |= (val64 << 16);

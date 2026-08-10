@@ -1,0 +1,62 @@
+#include "Psf1Parser.hpp"
+#include "Kstd.hpp"
+
+#define PSF1_MODE512    0x01
+#define PSF1_MODEHASTAB 0x02
+#define PSF1_MODEHASSEQ 0x04
+
+Psf1Parser::Psf1Parser(const uint8_t* file) : fontFile(file) {
+    const Header* header = reinterpret_cast<const Header*>(this->fontFile);
+    const uint64_t glyphCount = header->mode & PSF1_MODE512 ? 512 : 256;
+    const uint8_t* glyphDataStart = this->fontFile + sizeof(*header);
+    const uint16_t* unicodeTableStart = reinterpret_cast<const uint16_t*>(glyphDataStart + header->charsize * glyphCount);
+
+    uint32_t currentGlyphIndex = 0;
+
+    while (currentGlyphIndex < glyphCount) {
+        if (*unicodeTableStart == 0xFFFF) {
+            currentGlyphIndex++;
+            unicodeTableStart++;
+            continue;
+        } else if (*unicodeTableStart == 0xFFFE) {
+            while (*unicodeTableStart != 0xFFFF)
+                unicodeTableStart++;
+            
+            currentGlyphIndex++;
+            unicodeTableStart++;
+            continue;
+        }
+
+        const uint8_t l1_index = (*unicodeTableStart >> 16) & 0xFF;
+        const uint8_t l2_index = (*unicodeTableStart >> 8) & 0xFF;
+        const uint8_t l3_index = *unicodeTableStart & 0xFF;
+
+        uint64_t* L2 = nullptr;
+        uint32_t* L3 = nullptr;
+
+        if (L1[l1_index] != 0)
+            L2 = reinterpret_cast<uint64_t*>(L1[l1_index]);
+        else {
+            L2 = new uint64_t[256]{};
+            L1[l1_index] = reinterpret_cast<uint64_t>(L2);
+        }
+
+        if (L2[l2_index] != 0)
+            L3 = reinterpret_cast<uint32_t*>(L2[l2_index]);
+        else {
+            L3 = new uint32_t[256];
+            Kstd::memset(L3, 0xFFFFFFFF, 256 * sizeof(uint32_t));
+            L2[l2_index] = reinterpret_cast<uint64_t>(L3);
+        }
+
+        L3[l3_index] = currentGlyphIndex;
+
+        unicodeTableStart++;
+    }
+}
+
+uint32_t Psf1Parser::decodeUtf8(const char* c) {
+    const uint8_t* s = reinterpret_cast<const uint8_t*>(c);
+
+    // Not Finished!!!
+}
