@@ -70,6 +70,10 @@ uint32_t Psf1Parser::decodeUtf8(const char* c) {
         return -1;
 }
 
+uint32_t Psf1Parser::getGlyphIndex(uint32_t coedpoint) {
+
+}
+
 const uint8_t* Psf1Parser::getGlyphData(const char* c) {
     // Not Started Yet!!!
 }
