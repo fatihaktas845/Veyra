@@ -69,3 +69,7 @@ uint32_t Psf1Parser::decodeUtf8(const char* c) {
     else
         return -1;
 }
+
+const uint8_t* Psf1Parser::getGlyphData(const char* c) {
+    // Not Started Yet!!!
+}

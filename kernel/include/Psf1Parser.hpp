@@ -13,9 +13,11 @@ class Psf1Parser {
             uint8_t charsize;
         };
 
+        uint32_t decodeUtf8(const char* c);
+        uint32_t getGlyphIndex(uint32_t codepoint);
+
     public:
         explicit Psf1Parser(const uint8_t* file);
 
-        uint32_t decodeUtf8(const char* c);
-        const uint8_t* getGlyphData(uint32_t codepoint);
+        const uint8_t* getGlyphData(const char* c);
 };
