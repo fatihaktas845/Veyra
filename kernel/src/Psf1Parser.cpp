@@ -70,8 +70,15 @@ uint32_t Psf1Parser::decodeUtf8(const char* c) {
         return -1;
 }
 
-uint32_t Psf1Parser::getGlyphIndex(uint32_t coedpoint) {
+uint32_t Psf1Parser::getGlyphIndex(uint32_t codepoint) {
+    const uint8_t l1_index = (codepoint >> 16) & 0xFF;
+    const uint8_t l2_index = (codepoint >> 8) & 0xFF;
+    const uint8_t l3_index = codepoint & 0xFF;
 
+    uint64_t* L2 = reinterpret_cast<uint64_t*>(L1[l1_index]);
+    uint32_t* L3 = reinterpret_cast<uint32_t*>(L2[l2_index]);
+
+    return L3[l3_index];
 }
 
 const uint8_t* Psf1Parser::getGlyphData(const char* c) {
