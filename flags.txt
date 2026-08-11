@@ -6,6 +6,7 @@
 -fno-rtti
 -fno-exceptions
 -fno-threadsafe-statics
+-fexec-charset=UTF-8
 -mno-sse
 -mno-sse2
 -mno-mmx

@@ -82,5 +82,8 @@ uint32_t Psf1Parser::getGlyphIndex(uint32_t codepoint) {
 }
 
 const uint8_t* Psf1Parser::getGlyphData(const char* c) {
-    // Not Started Yet!!!
+    const Header* header = reinterpret_cast<const Header*>(this->fontFile);
+    const uint8_t* glyphDataStart = this->fontFile + sizeof(*header);
+
+    return glyphDataStart + header->charsize * this->getGlyphIndex(this->decodeUtf8(c));
 }
