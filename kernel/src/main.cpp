@@ -28,7 +28,7 @@ extern "C" void kmain() {
 	PhysicalMemoryManager::init();
 
 	PhysicalAddress pa(reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage()));
-	globalKernelVmm = new (pa.toVirtualHhdmAddress().asPtr<void>()) VirtualMemoryManager();
+	globalKernelVmm = new (pa.toVirtualHhdmAddress().asPtr()) VirtualMemoryManager();
 
 	KernelHeap::init(globalKernelVmm);
 
