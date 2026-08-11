@@ -9,4 +9,6 @@ namespace Kstd {
 	int strcmp(const char* str1, const char* str2);
 
 	uint64_t strToUint64(const char* str, int base = 10);
+
+	void print(const char* c);
 }

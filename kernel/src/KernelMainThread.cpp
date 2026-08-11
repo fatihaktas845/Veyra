@@ -1,4 +1,5 @@
 #include "Process.hpp"
+#include "Kstd.hpp"
 
 #include <stdint.h>
 
@@ -25,6 +26,8 @@ void kernelMainThread() {
 			framebuffer_address[pixel_index] = 0x0000FF00;
 		}
 	}
+
+	Kstd::print("L");
 
     while (true)
         __asm__ volatile("hlt");

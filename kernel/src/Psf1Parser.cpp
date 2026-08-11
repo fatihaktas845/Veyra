@@ -7,6 +7,7 @@
 
 Psf1Parser::Psf1Parser(const uint8_t* file) : fontFile(file) {
     const Header* header = reinterpret_cast<const Header*>(this->fontFile);
+    this->charsize = header->charsize;
     const uint64_t glyphCount = header->mode & PSF1_MODE512 ? 512 : 256;
     const uint8_t* glyphDataStart = this->fontFile + sizeof(*header);
     const uint16_t* unicodeTableStart = reinterpret_cast<const uint16_t*>(glyphDataStart + header->charsize * glyphCount);

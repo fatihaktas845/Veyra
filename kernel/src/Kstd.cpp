@@ -1,4 +1,6 @@
 #include "Kstd.hpp"
+#include "Ramdisk.hpp"
+#include "Psf1Parser.hpp"
 
 void* Kstd::memset(void* dest, int c, uint64_t count) {
     uint8_t* d = static_cast<uint8_t*>(dest);
@@ -95,6 +97,30 @@ uint64_t Kstd::strToUint64(const char* str, int base) {
     }
 
     return sum;
+}
+
+extern volatile uint32_t* framebuffer_address;
+extern uint64_t pitch;
+
+void Kstd::print(const char* c) {
+    Psf1Parser parser(Ramdisk::readFile("fonts/iso09.f16.psf"));
+    const uint8_t* glyphData = parser.getGlyphData(c);
+
+    for (uint8_t y = 0; y < parser.charsize; y++) {
+        uint8_t row = glyphData[y];
+
+        for (uint8_t x = 0; x < 8; x++) {
+            if (row & (0x80 >> x)) {
+                for (uint8_t sy = 0; sy < 4; sy++) {
+                    for (uint8_t sx = 0; sx < 4; sx++) {
+                        uint8_t posX = x * 4 + sx;
+                        uint8_t posY = y * 4 + sy;
+                        framebuffer_address[posX + posY * (pitch / 4)] = 0x00FF00FF;
+                    }
+                }
+            }
+        }
+    }
 }
 
 extern "C" {

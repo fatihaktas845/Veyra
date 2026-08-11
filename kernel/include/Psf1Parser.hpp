@@ -17,6 +17,8 @@ class Psf1Parser {
         uint32_t getGlyphIndex(uint32_t codepoint);
 
     public:
+        uint8_t charsize = 0;
+        
         explicit Psf1Parser(const uint8_t* file);
 
         const uint8_t* getGlyphData(const char* c);
