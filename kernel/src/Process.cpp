@@ -59,9 +59,14 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
     for (uint64_t i = 0; i < 15; i++)
         *(--pst) = 0ULL;
     
+    /* if (isUser) { */
     VirtualMemoryManager* newVmm = new VirtualMemoryManager();
     newBlock->vmm = newVmm;
     newBlock->cr3 = newVmm->getPml4().toPhysicalHhdmAddress().raw;
+    /* } else {
+        newBlock->vmm = KernelHeap::kernelVmm;
+        newBlock->cr3 = VirtualMemoryManager::getCr3();
+    } */
 
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;
