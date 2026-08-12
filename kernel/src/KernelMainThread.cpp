@@ -27,8 +27,6 @@ void kernelMainThread() {
 		}
 	}
 
-	Kstd::print("L");
-
     while (true)
         __asm__ volatile("hlt");
 }
