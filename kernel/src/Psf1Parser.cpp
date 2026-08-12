@@ -56,19 +56,25 @@ Psf1Parser::Psf1Parser(const uint8_t* file) : fontFile(file) {
     }
 }
 
-uint32_t Psf1Parser::decodeUtf8(const char* c) {
+uint32_t Psf1Parser::decodeUtf8(const char* c, uint8_t& charSize_out) {
     const uint8_t* s = reinterpret_cast<const uint8_t*>(c);
 
-    if ((s[0] & 0x80) == 0) // 0xxxxxxx
+    if ((s[0] & 0x80) == 0) { // 0xxxxxxx
+        charSize_out = 1;
         return s[0];
-    else if ((s[0] & 0xE0) == 0xC0) // 110xxxxx 10xxxxxx
+    } else if ((s[0] & 0xE0) == 0xC0) { // 110xxxxx 10xxxxxx
+        charSize_out = 2;
         return ((s[0] & 0x1F) << 6) | (s[1] & 0x3F);
-    else if ((s[0] & 0xF0) == 0xE0) // 1110xxxx 10xxxxxx 10xxxxxx
+    } else if ((s[0] & 0xF0) == 0xE0) { // 1110xxxx 10xxxxxx 10xxxxxx
+        charSize_out = 3;
         return ((s[0] & 0x0F) << 12) | ((s[1] & 0x3F) << 6) | (s[2] & 0x3F);
-    else if ((s[0] & 0xF8) == 0xF0) // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+    } else if ((s[0] & 0xF8) == 0xF0) { // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+        charSize_out = 4;
         return ((s[0] & 0x07) << 18) | ((s[1] & 0x3F) << 12) | ((s[2] & 0x3F) << 6) | (s[3] & 0x3F);
-    else
+    } else {
+        charSize_out = 0;
         return -1;
+    }
 }
 
 uint32_t Psf1Parser::getGlyphIndex(uint32_t codepoint) {
@@ -82,9 +88,9 @@ uint32_t Psf1Parser::getGlyphIndex(uint32_t codepoint) {
     return L3[l3_index];
 }
 
-const uint8_t* Psf1Parser::getGlyphData(const char* c) {
+const uint8_t* Psf1Parser::getGlyphData(const char* c, uint8_t& charSize_out) {
     const Header* header = reinterpret_cast<const Header*>(this->fontFile);
     const uint8_t* glyphDataStart = this->fontFile + sizeof(*header);
 
-    return glyphDataStart + header->charsize * this->getGlyphIndex(this->decodeUtf8(c));
+    return glyphDataStart + header->charsize * this->getGlyphIndex(this->decodeUtf8(c, charSize_out));
 }

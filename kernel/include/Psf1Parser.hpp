@@ -13,7 +13,7 @@ class Psf1Parser {
             uint8_t charsize;
         };
 
-        uint32_t decodeUtf8(const char* c);
+        uint32_t decodeUtf8(const char* c, uint8_t& charSize_out);
         uint32_t getGlyphIndex(uint32_t codepoint);
 
     public:
@@ -21,5 +21,11 @@ class Psf1Parser {
         
         explicit Psf1Parser(const uint8_t* file);
 
-        const uint8_t* getGlyphData(const char* c);
+        Psf1Parser(const Psf1Parser&) = delete;
+        Psf1Parser& operator=(const Psf1Parser&) = delete;
+
+        Psf1Parser(Psf1Parser&&) = delete;
+        Psf1Parser& operator=(Psf1Parser&&) = delete;
+
+        const uint8_t* getGlyphData(const char* c, uint8_t& charSize_out);
 };
