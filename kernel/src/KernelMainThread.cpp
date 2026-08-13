@@ -20,7 +20,7 @@ void kernelMainThread() {
 
 	Log::print("Welcome to Veyra\n");
 	Process::sleep(4000);
-	Log::print("Finished!");
+	Log::print("Finished!", 0x00FF00FF);
 
     while (true)
         __asm__ volatile("hlt");
