@@ -15,7 +15,7 @@ void Log::init() {
     parser = new Psf1Parser(Ramdisk::readFile("fonts/iso09.f16.psf"));
 }
 
-void Log::print(const char* str) {
+void Log::print(const char* str, uint32_t color) {
     const uint8_t scale = 2;
 
     uint8_t charSize;
@@ -39,7 +39,7 @@ void Log::print(const char* str) {
                             const uint64_t coordX = posX + (x * scale) + sx;
                             const uint64_t coordY = posY + (y * scale) + sy;
 
-                            framebuffer_address[coordY * (pitch / 4) + coordX] = 0x00FF00FF;
+                            framebuffer_address[coordY * (pitch / 4) + coordX] = color;
                         }
                     }
                 }

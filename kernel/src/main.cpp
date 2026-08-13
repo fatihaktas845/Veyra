@@ -48,7 +48,7 @@ extern "C" void kmain() {
 		for (uint64_t x = 0; x < width; x++) {
 			uint64_t pixel_index = x + (y * (pitch / 4));
 
-			framebuffer_address[pixel_index] = 0x00FFFFFF;
+			framebuffer_address[pixel_index] = 0x0;
 		}
 	}
 
