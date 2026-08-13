@@ -4,12 +4,14 @@
 #include "Serial.hpp"
 #include "Kstd.hpp"
 #include "VirtualMemoryManager.hpp"
+#include "Gdt.hpp"
 
 static Idt::entry idt_entries[256] = {};
 Idt::descriptor idtr;
 uint64_t timerInterruptCounter = 0;
 
 extern Process::ControlBlock* currentProcessControlBlock;
+extern Gdt::TSS globalTss;
 
 extern "C" {
 	void timerInterruptAsm();
@@ -80,6 +82,8 @@ extern "C" {
 			currentProcessControlBlock = currentProcessControlBlock->readyNext;
 		else
 			currentProcessControlBlock = Process::readyQueue;
+		
+		globalTss.rsp[0] = currentProcessControlBlock->syscallRsp;
 		
 		currentProcessControlBlock->vmm->loadCr3();
 

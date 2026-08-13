@@ -13,7 +13,7 @@ VirtualMemoryManager::VirtualMemoryManager() {
 	this->setPml4(pa.toVirtualHhdmAddress());
 }
 
-void VirtualMemoryManager::setPml4(const VirtualAddress pml4) {
+void VirtualMemoryManager::setPml4(VirtualAddress pml4) {
 	this->currentPml4 = pml4;
 
 	const uint64_t cr3 = getCr3();
@@ -33,7 +33,7 @@ VirtualAddress VirtualMemoryManager::getPml4() const {
 	return this->currentPml4;
 }
 
-void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags) {
+void VirtualMemoryManager::mapPage(PhysicalAddress pa, VirtualAddress va, uint64_t flags) {
 	const uint64_t aligned_pa = pa.raw & ~0xFFFULL;
 	const uint64_t aligned_va = va.raw & ~0xFFFULL;
 
@@ -89,7 +89,7 @@ void VirtualMemoryManager::mapPage(const PhysicalAddress pa, const VirtualAddres
 	);
 }
 
-void VirtualMemoryManager::unmapPage(const VirtualAddress va) {
+void VirtualMemoryManager::unmapPage(VirtualAddress va) {
 	const uint64_t aligned_va = va.raw & ~0xFFFULL;
 
 	const uint64_t pml4Index = (aligned_va >> 39) & 0x1FFULL;
@@ -145,7 +145,7 @@ void VirtualMemoryManager::unmapPage(const VirtualAddress va) {
 	}
 }
 
-PhysicalAddress VirtualMemoryManager::toPhysicalAddress(const VirtualAddress addr) {
+PhysicalAddress VirtualMemoryManager::toPhysicalAddress(VirtualAddress addr) {
 	const uint64_t va = addr.raw;
 
 	const uint64_t pml4Index = (va >> 39) & 0x1FFULL;
@@ -180,7 +180,7 @@ PhysicalAddress VirtualMemoryManager::toPhysicalAddress(const VirtualAddress add
 	} else return PhysicalAddress(0);
 }
 
-bool VirtualMemoryManager::allocPage(const VirtualAddress pageAddr, const uint64_t flags) {
+bool VirtualMemoryManager::allocPage(VirtualAddress pageAddr, uint64_t flags) {
 	const uint64_t paRaw = reinterpret_cast<uint64_t>(PhysicalMemoryManager::allocPage());
 
 	if (paRaw != 0) {

@@ -26,7 +26,6 @@ void Process::init() {
     
     ControlBlock* kernelProcess = new ControlBlock;
     kernelProcess->vmm = KernelHeap::kernelVmm;
-    kernelProcess->cr3 = VirtualMemoryManager::getCr3();
     kernelProcess->rsp = reinterpret_cast<uint64_t>(kernel_stack_top);
     kernelProcess->pid = lastPid++;
 
@@ -35,12 +34,26 @@ void Process::init() {
     lastReadyBlock = kernelProcess;
 }
 
-void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUser) {
+void Process::create(const uint64_t rip, const bool isUser) {
     [[maybe_unused]] InterruptGuard interruptGuard;
 
     ControlBlock* newBlock = new ControlBlock;
 
+    if (isUser) {
+        VirtualMemoryManager* newVmm = new VirtualMemoryManager();
+        newBlock->vmm = newVmm;
+    } else
+        newBlock->vmm = KernelHeap::kernelVmm;
+
+    uint64_t* rsp = new uint64_t[16 * 1024 / 8]; // 16 KiB
+    uint64_t rspTop = reinterpret_cast<uint64_t>(rsp) + 16 * 1024;
     uint64_t* pst = reinterpret_cast<uint64_t*>(rspTop);
+
+    if (isUser) {
+        uint64_t* syscallRsp = new uint64_t[16 * 1024 / 8]; // 16 KiB
+        newBlock->syscallRsp = reinterpret_cast<uint64_t>(syscallRsp) + 16 * 1024;
+    }
+
     *(--pst) = isUser ? 0x1BULL : 0x10ULL; // SS
     *(--pst) = rspTop; // RSP
     uint64_t rflags;
@@ -58,15 +71,6 @@ void Process::create(const uint64_t rspTop, const uint64_t rip, const bool isUse
 
     for (uint64_t i = 0; i < 15; i++)
         *(--pst) = 0ULL;
-    
-    /* if (isUser) { */
-    VirtualMemoryManager* newVmm = new VirtualMemoryManager();
-    newBlock->vmm = newVmm;
-    newBlock->cr3 = newVmm->getPml4().toPhysicalHhdmAddress().raw;
-    /* } else {
-        newBlock->vmm = KernelHeap::kernelVmm;
-        newBlock->cr3 = VirtualMemoryManager::getCr3();
-    } */
 
     newBlock->rsp = reinterpret_cast<uint64_t>(pst);
     newBlock->pid = lastPid++;

@@ -18,16 +18,16 @@ class VirtualMemoryManager {
 	public:
 		VirtualMemoryManager();
 
-		void setPml4(const VirtualAddress pml4);
+		void setPml4(VirtualAddress pml4);
 		[[nodiscard]] VirtualAddress getPml4() const;
 
-		void mapPage(const PhysicalAddress pa, const VirtualAddress va, const uint64_t flags);
-		void unmapPage(const VirtualAddress va);
+		void mapPage(PhysicalAddress pa, VirtualAddress va, uint64_t flags);
+		void unmapPage(VirtualAddress va);
 
-		PhysicalAddress toPhysicalAddress(const VirtualAddress addr);
+		PhysicalAddress toPhysicalAddress(VirtualAddress addr);
 
-		bool allocPage(const VirtualAddress pageAddr, const uint64_t flags);
-		void freePage(const VirtualAddress pageAddr);
+		bool allocPage(VirtualAddress pageAddr, uint64_t flags);
+		void freePage(VirtualAddress pageAddr);
 
 		void loadCr3();
 		[[nodiscard]] static uint64_t getCr3();
