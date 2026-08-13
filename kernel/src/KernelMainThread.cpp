@@ -19,7 +19,7 @@ void kernelMainThread() {
 	Log::init();
 
 	Log::print("Welcome to Veyra\n");
-	Process::sleep(2000);
+	Process::sleep(4000);
 	Log::print("Finished!");
 
     while (true)
