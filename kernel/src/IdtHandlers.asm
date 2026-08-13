@@ -21,8 +21,5 @@ section .text
         mov rax, [currentProcessControlBlock]
         mov rsp, [rax]
 
-        ; mov rbx, [rax + 16]
-        ; mov cr3, rbx
-
         popall
         iretq
